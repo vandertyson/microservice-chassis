@@ -1,0 +1,33 @@
+# Deploy Jaeger All in one for testing
+docker run -d --name jaeger \
+  -e COLLECTOR_ZIPKIN_HTTP_PORT=9411 \
+  -p 5775:5775/udp \
+  -p 6831:6831/udp \
+  -p 6832:6832/udp \
+  -p 5778:5778 \
+  -p 16686:16686 \
+  -p 14268:14268 \
+  -p 14250:14250 \
+  -p 9411:9411 \
+  -p 14271:14271 \
+  -p 14269:14269 \
+  docker-registry:4000/jaegertracing/all-in-one:1.19
+
+
+docker run -it --name jaeger docker-registry:4000/jaegertracing/all-in-one:1.19 --help
+  
+kubectl create secret generic jaeger-secret --from-literal=ES_PASSWORD=YQAJ3424wjCu0L8s046Uu8BZ --from-literal=ES_USERNAME=elastic
+
+
+## Command
+# Deploy Operator
+kubectl apply -f deploy/tracing/jaeger-1.20/operator/
+
+# Deploy Jaeger
+kubectl apply -f deploy/tracing/jaeger-1.20/jaeger/jaeger_elasticsearch.yaml 
+
+# Export service for query
+kubectl patch svc jaeger-production-query -n microservices-chassis --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"},{"op":"replace","path":"/spec/ports/0/nodePort","value":31706}]'
+
+# Get param
+docker run docker-registry:4000/jaegertracing/jaeger-query:1.20.0 --help

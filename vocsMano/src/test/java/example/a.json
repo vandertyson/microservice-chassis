@@ -1,0 +1,30 @@
+{
+  "_id": "72d0c95d-9530-4853-b352-4f87ff0cea0d",
+  "notificationType": "ALARM_NOTIFICATION",
+  "timeStamp": 1614769285578,
+  "alarm": {
+    "_id": "7fd1853c-894d-4ba6-9d41-e51fa62dc0e0",
+    "managedObjectId": "d4838036-e7dc-4b00-84be-47fd2f2c2584",
+    "managedObjectName": "vnfm-63e3e6e62cad",
+    "vnfcIds": [
+      "05225fe3-2b08-4971-80d8-eff992f246e2"
+    ],
+    "vnfcNames": [
+      "vnfm-63e3e6e62cad"
+    ],
+    "alarmRaisedTime": 0,
+    "alarmChangedTime": 0,
+    "alarmClearedTime": 0,
+    "ackState": "UNACKNOWLEDGED",
+    "perceivedSeverity": "CRITICAL",
+    "eventTime": 1614769285573,
+    "eventType": "COMMUNICATIONS_ALARM",
+    "faultType": "VNFC_INSTANCE",
+    "probableCause": "Vnfc with Id 05225fe3-2b08-4971-80d8-eff992f246e2 is ERROR",
+    "isRootCause": true,
+    "metaData": {
+      "vnfInstanceName": "Tuyenlt6"
+    }
+  },
+  "alarmType": "VNF_OBJECT"
+}

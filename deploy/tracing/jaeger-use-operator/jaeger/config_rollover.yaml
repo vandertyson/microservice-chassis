@@ -1,0 +1,17 @@
+apiVersion: jaegertracing.io/v1
+kind: Jaeger
+metadata:
+  name: jaeger-production
+  namespace: microservices-chassis
+spec:
+  strategy: production
+  storage:
+    type: elasticsearch
+    options:
+      es:        
+        use-aliases: true
+    esRollover:
+      conditions: "{\"max_age\": \"2d\"}"            # conditions when to rollover to a new index
+#      conditions: "{\"max_size\": \"1gb\"}"
+      readTTL: 1h                                    # how long should be old data available for reading (7 days)
+      schedule: "*/4 * * * *"                        # cron expression for it to run

@@ -1,0 +1,33 @@
+curl --location --request POST 'http://172.20.3.174:9981/users/auth' \
+--header 'Authorization: Basic b2NzX3N5c3RlbToxMjM0NTZhQEE=' \  #  "username:password" bằng base64
+--header 'Content-Type: application/json' \
+-d '{"grant_type":"client_credentials"}'
+
+curl -X POST http://172.20.3.81:8889/cnflcm/v1/cnfc_status \
+-H 'Authorization: Bearer eyJraWQiOiIvYXV0aC9wcml2YXRlLmtleSIsInR5cCI6IkpXVCIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJodHRwczovL25mdl92aWV0dGVsLmNvbSIsInN1YiI6Im1hbm8iLCJpYXQiOjE3MjM1MTg4OTksImV4cCI6MTcyMzUzMzI5OTIyMiwidXNlcl9pZCI6IjNhYzYzNTYzLTQ4OGYtNDM4Ni1iZDVmLTNiZTYwNWU4Njg1MCIsImp0aSI6Ijk0OTdiZWFlLTRlYmItNGUxMS1hMGEyLWExYWQ4ZjU2MTc5ZCJ9.ZeAbL2f0mR3a_U7wjP2QImOeSlus1y71AEmwynx6xwM1QmZwNM3-KVGxBwNXBDMpXOZd6FAyJv7gzLTmFLQIZZ8H6lj9V3t8bW1bzVTz9KjRPS7qJmdvmocBUtuMRKFzagkmMgUpgekxc3zTBptoVBzPrTwm90zpD6sYjhzeYa41gClkckFb851CZmOF-dUADNYXJTizOOeLNm5wa3NYwrwQum5XbAX9CNvXzNI7Sxx0OFIDuMWBBHE46ie2YDSJRy8WU2X_KGZ6RTMzxPdGhgNQp4jJu-N3OexHUfx6uh9cUCCd2oP5zKhVDD-Slp3pPKmiTTcICDoMuuxaa9c5bg' \
+-H 'Content-Type: application/json' \
+-d '{
+"VNF_INSTANCE_ID": "18d38edf-6072-44fb-b25b-50373acd938f",
+"VNFC_ID": "b59ec58c-ae0e-4e62-8cc6-3b2b87c0ed8d"
+}'
+curl -X POST \
+http://172.20.3.81:8889/cnflcm/v1/cnfc_status \
+-H 'Authorization: Bearer eyJraWQiOiIvYXV0aC9wcml2YXRlLmtleSIsInR5cCI6IkpXVCIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJodHRwczovL25mdl92aWV0dGVsLmNvbSIsInN1YiI6Im1hbm8iLCJpYXQiOjE3MjM1MTg4OTksImV4cCI6MTcyMzUzMzI5OTIyMiwidXNlcl9pZCI6IjNhYzYzNTYzLTQ4OGYtNDM4Ni1iZDVmLTNiZTYwNWU4Njg1MCIsImp0aSI6Ijk0OTdiZWFlLTRlYmItNGUxMS1hMGEyLWExYWQ4ZjU2MTc5ZCJ9.ZeAbL2f0mR3a_U7wjP2QImOeSlus1y71AEmwynx6xwM1QmZwNM3-KVGxBwNXBDMpXOZd6FAyJv7gzLTmFLQIZZ8H6lj9V3t8bW1bzVTz9KjRPS7qJmdvmocBUtuMRKFzagkmMgUpgekxc3zTBptoVBzPrTwm90zpD6sYjhzeYa41gClkckFb851CZmOF-dUADNYXJTizOOeLNm5wa3NYwrwQum5XbAX9CNvXzNI7Sxx0OFIDuMWBBHE46ie2YDSJRy8WU2X_KGZ6RTMzxPdGhgNQp4jJu-N3OexHUfx6uh9cUCCd2oP5zKhVDD-Slp3pPKmiTTcICDoMuuxaa9c5bg' \
+-H 'Cache-Control: no-cache' \
+-H 'Content-Type: application/json' \
+-H 'Postman-Token: 2ede1fdc-4620-4b63-9a0c-07d84f64e7f2' \
+-d '{
+"VNF_INSTANCE_ID": "18d38edf-6072-44fb-b25b-50373acd938f",
+"VNFC_ID": "b59ec58c-ae0e-4e62-8cc6-3b2b87c0ed8d"
+
+}'
+
+curl --location --request POST 'http://172.20.3.174:9981/users/auth' \
+--header 'Authorization: Basic b2NzX3N5c3RlbToxMjM0NTZhQEE=' \
+--header 'Content-Type: application/json' \
+-d '{
+ "grant_type":"client_credentials"
+}'
+
+// chp env:
+VNF_INSTANCE_ID=988f4896-b793-4d22-9975-db78538573f1;VNFM_SECRET=w0PxOAw3G5PdKkAl/eRT7Y1U4l2DEYJ5+Kd3bIOpoAstkEHgqMu+/Oq8a920inzAOZMxDCAkF8QNz72ldavi+A==;VDU_NAME=chp-gy;MANO_METRIC_RECEIVE_URI=http://172.20.3.172:9981/extended-pm/v1/metric/import;MANO_AUTHORIZATION_SERVER=http://172.20.3.172:9981/users/auth;VNFC_NOTIFICATION_ENDPOINT=http://172.20.3.172:9981/cnflcm/v1/cnfc_status;METRIC_COLLECT_INTERVAL_SEC=0;METRIC_PUSH_INTERVAL_SEC=0;JAEGER_ENDPOINT=http://172.20.3.81:9268/api/traces;VNF_INSTANCE_NAME=data4g;MANO_RECEIVED_ALARM_URI=http://172.20.3.172:9981/cnffm/v1/alarms/notifications;VNFM_ID=ocs_system;MANO_ENABLE=true;VNFC_ID=r921y8rusprp94ujfp-0a3j4pfyhp0;VNFC_NAME=chp-gy-85fdf75fdf-rv6hb

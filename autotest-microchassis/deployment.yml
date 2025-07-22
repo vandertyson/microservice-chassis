@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: autotest-chassis
+  namespace: tiennn18-test
+  labels:
+    app: autotest-chassis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: autotest-chassis
+  template:
+    metadata:
+      labels:
+        app: autotest-chassis
+    spec:
+      containers:
+        - name: java
+          image: docker-registry:4000/autotest-microchassis:latest
+          imagePullPolicy: Always
+          command: ["sh", "-c", "while true; do sleep 3600; done"]
+          env:
+            - name: CHASSIS_RESOLVE_NAME
+              value: "headless-svc.tiennn18-test"
+            - name: CHASSIS_RESOLVE_LENGTH
+              value: "200"
+            - name: CHASSIS_RESOLVE_LOOP
+              value: "5"
+          resources:
+            requests:
+              memory: 2Gi

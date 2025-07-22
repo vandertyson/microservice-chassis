@@ -1,0 +1,24 @@
+!!com.viettel.vocs.microchassis.connection.config.ConnectionConfiguration
+clients:
+- id: tcp-client
+  host: abm
+  port: 9002
+- !!com.viettel.vocs.microchassis.http.config.HttpClientOptions
+  id: tcp-client
+  host: abm
+  port: 9002
+servers:
+- !!com.viettel.vocs.microchassis.http.config.HttpServerOptions
+  id: tiennn-http
+  port: 8080
+  protoConfigs:
+    HTTP/1.1:
+      !!com.viettel.vocs.microchassis.http.config.Http1_1VersionConfigures
+      maxContentLength: 1024
+#    HTTP/1.0:
+#      !!com.viettel.vocs.microchassis.http.config.Http1_0VersionConfigures
+#      maxContentLength: 1024
+#    HTTP/2.0:
+#      !!com.viettel.vocs.microchassis.http.config.Http2_0VersionConfigures
+#      maxContentLength: 1024
+

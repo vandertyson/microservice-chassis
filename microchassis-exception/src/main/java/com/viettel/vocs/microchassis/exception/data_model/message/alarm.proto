@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+option java_package = "com.viettel.vocs.microchassis.exception.data_model.message";
+option java_outer_classname = "AlarmProtos";
+
+message Alarm {
+    string id = 1;
+    string managedObjectId = 2;
+    string managedObjectName = 3;
+    repeated string vnfcIds = 4;
+    repeated string vnfcNames = 5;
+    int64 alarmRaisedTime = 6;
+    int64 alarmChangedTime = 7;
+    int64 alarmClearedTime = 8;
+    AckState ackState = 9;
+    PerceivedSeverityType perceivedSeverity = 10;
+    int64 eventTime = 11;
+    EventType eventType = 12;
+    FaultType faultType = 13;
+    string probableCause = 14;
+    bool isRootCause = 15;
+    repeated string correlatedAlarmIds = 16;
+    repeated string faultDetails = 17;
+    map<string, string> metaData = 18;
+}
+
+message AlarmNotification {
+    string id = 1;
+    NotificationType notificationType = 2;
+    string subscriptionId = 3;
+    int64 timeStamp = 4;
+    Alarm alarm = 5;
+    ManagedObjectType alarmType = 6;
+}
+
+message AlarmClearedNotification {
+    string id = 1;
+    NotificationType notificationType = 2;
+    string subscriptionId = 3;
+    int64 timeStamp = 4;
+    int64 alarmClearedTime = 5;
+    string alarmId = 6;
+    ManagedObjectType alarmType = 7;
+}
+
+enum AckState {
+    UNACKNOWLEDGED = 0;
+    ACKNOWLEDGED = 1;
+}
+
+enum PerceivedSeverityType {
+    CRITICAL = 0;
+    MAJOR = 1;
+    MINOR = 2;
+    WARNING = 3;
+    INDETERMINATE = 4;
+    CLEARED = 5;
+}
+
+enum EventType {
+    COMMUNICATIONS_ALARM = 0;
+    PROCESSING_ERROR_ALARM = 1;
+    ENVIROMENTAL_ALARM = 2;
+    QOS_ALARM = 3;
+    EQUIPMENT_ALARM = 4;
+}
+
+enum FaultType {
+    VNF_INSTANCE = 0;
+    VNFC_INSTANCE = 1;
+}
+
+enum NotificationType {
+    ALARM_NOTIFICATION = 0;
+    ALARM_CLEARED_NOTIFICATION = 1;
+}
+
+enum ManagedObjectType {
+    VNF_OBJECT = 0;
+}

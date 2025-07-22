@@ -1,0 +1,176 @@
+{
+  "addresses": {
+    "infraAddress": {
+      "name": "22_614086796198294",
+      "owner": {
+        "name": "csde-cgw-data-gx",
+        "owner": {
+          "name": "VIM00",
+          "owner": {
+            "name": "VIETTEL",
+            "owner": {
+              "name": "VIETTEL",
+              "owner": null,
+              "fullQualifyAddress": "VIETTEL",
+              "objectClass": "com.viettel.vocs.microchassis.topology.model.infra.node.Region"
+            },
+            "fullQualifyAddress": "VIETTEL;VIETTEL",
+            "objectClass": "com.viettel.vocs.microchassis.topology.model.infra.node.Zone"
+          },
+          "fullQualifyAddress": "VIM00;VIETTEL;VIETTEL",
+          "objectClass": "com.viettel.vocs.microchassis.topology.model.infra.node.Floor"
+        },
+        "fullQualifyAddress": "csde-cgw-data-gx;VIM00;VIETTEL;VIETTEL",
+        "objectClass": "com.viettel.vocs.microchassis.topology.model.infra.node.PNode"
+      },
+      "fullQualifyAddress": "22_614086796198294;csde-cgw-data-gx;VIM00;VIETTEL;VIETTEL",
+      "objectClass": "com.viettel.vocs.microchassis.topology.model.infra.node.Process"
+    },
+    "businessAddress": {
+      "name": "chassis",
+      "owner": {
+        "name": "OCS",
+        "owner": null,
+        "fullQualifyAddress": "OCS",
+        "objectClass": "com.viettel.vocs.microchassis.topology.model.business.node.GrandBusiness"
+      },
+      "fullQualifyAddress": "chassis;OCS",
+      "objectClass": "com.viettel.vocs.microchassis.topology.model.business.node.SubBusiness"
+    },
+    "virtAddress": {
+      "name": "cgw-data-gx-1742875515307-8544d59c9b-d4chj",
+      "owner": {
+        "name": "cgw-data-gx",
+        "owner": {
+          "name": "data-hht-2",
+          "owner": {
+            "name": "OCS",
+            "owner": null,
+            "fullQualifyAddress": "OCS",
+            "objectClass": "com.viettel.vocs.microchassis.topology.model.virt.node.NS"
+          },
+          "fullQualifyAddress": "data-hht-2;OCS",
+          "objectClass": "com.viettel.vocs.microchassis.topology.model.virt.node.CNF"
+        },
+        "fullQualifyAddress": "cgw-data-gx;data-hht-2;OCS",
+        "objectClass": "com.viettel.vocs.microchassis.topology.model.virt.node.VDU"
+      },
+      "fullQualifyAddress": "cgw-data-gx-1742875515307-8544d59c9b-d4chj;cgw-data-gx;data-hht-2;OCS",
+      "objectClass": "com.viettel.vocs.microchassis.topology.model.virt.node.CNFC"
+    }
+  },
+  "nodes": {
+    "manoClient": {
+      "id": "manoClient",
+      "isServer": false,
+      "objectClass": "com.viettel.vocs.microchassis.topology.model.TopoNode"
+    },
+    "defaultHttpClient": {
+      "id": "defaultHttpClient",
+      "isServer": false,
+      "objectClass": "com.viettel.vocs.microchassis.topology.model.TopoNode"
+    },
+    "tcp-server": {
+      "id": "tcp-server",
+      "isServer": true,
+      "objectClass": "com.viettel.vocs.microchassis.topology.model.TopoNode"
+    },
+    "http-metricserver": {
+      "id": "http-metricserver",
+      "isServer": true,
+      "objectClass": "com.viettel.vocs.microchassis.topology.model.TopoNode"
+    },
+    "pcp-gx": {
+      "id": "pcp-gx",
+      "isServer": false,
+      "objectClass": "com.viettel.vocs.microchassis.topology.model.TopoNode"
+    },
+    "RarProxy_OCS3": {
+      "id": "RarProxy_OCS3",
+      "isServer": false,
+      "objectClass": "com.viettel.vocs.microchassis.topology.model.TopoNode"
+    },
+    "abm": {
+      "id": "abm",
+      "isServer": false,
+      "objectClass": "com.viettel.vocs.microchassis.topology.model.TopoNode"
+    }
+  },
+  "links": {
+    "http-metricserver_0:0:0:0:0:0:0:1%0:9000_0:0:0:0:0:0:0:1%0": {
+      "info": {
+        "id": "http-metricserver_0:0:0:0:0:0:0:1%0:9000_0:0:0:0:0:0:0:1%0",
+        "owner": "http-metricserver",
+        "dest": {
+          "ip": null,
+          "port": 9000,
+          "serviceName": "0:0:0:0:0:0:0:1%0"
+        },
+        "source": {
+          "ip": null,
+          "port": 0,
+          "serviceName": "0:0:0:0:0:0:0:1%0"
+        },
+        "connected": 1,
+        "desired": 1,
+        "businessAddress": null,
+        "infraAddress": null,
+        "virtAddress": null
+      },
+      "id": "http-metricserver_0:0:0:0:0:0:0:1%0:9000_0:0:0:0:0:0:0:1%0",
+      "beaconId": "http-metricserver",
+      "beaconIsSource": false,
+      "objectClass": "com.viettel.vocs.microchassis.topology.model.TopoLink"
+    },
+    "abm_csde-abm_172.31.128.190:39826_csde-abm@172.31.128.188:9006": {
+      "info": {
+        "id": "abm_csde-abm_172.31.128.190:39826_csde-abm@172.31.128.188:9006",
+        "owner": "abm",
+        "dest": {
+          "ip": "172.31.128.188",
+          "port": 9006,
+          "serviceName": "csde-abm"
+        },
+        "source": {
+          "ip": "172.31.128.190",
+          "port": 39826,
+          "serviceName": null
+        },
+        "connected": 1,
+        "desired": 1,
+        "businessAddress": null,
+        "infraAddress": null,
+        "virtAddress": null
+      },
+      "id": "abm_csde-abm_172.31.128.190:39826_csde-abm@172.31.128.188:9006",
+      "beaconId": "abm",
+      "beaconIsSource": true,
+      "objectClass": "com.viettel.vocs.microchassis.topology.model.TopoLink"
+    },
+    "pcp-gx_csde-pcp-data-gx_172.31.128.190:35352_csde-pcp-data-gx@172.31.128.189:9004": {
+      "info": {
+        "id": "pcp-gx_csde-pcp-data-gx_172.31.128.190:35352_csde-pcp-data-gx@172.31.128.189:9004",
+        "owner": "pcp-gx",
+        "dest": {
+          "ip": "172.31.128.189",
+          "port": 9004,
+          "serviceName": "csde-pcp-data-gx"
+        },
+        "source": {
+          "ip": "172.31.128.190",
+          "port": 35352,
+          "serviceName": null
+        },
+        "connected": 1,
+        "desired": 1,
+        "businessAddress": null,
+        "infraAddress": null,
+        "virtAddress": null
+      },
+      "id": "pcp-gx_csde-pcp-data-gx_172.31.128.190:35352_csde-pcp-data-gx@172.31.128.189:9004",
+      "beaconId": "pcp-gx",
+      "beaconIsSource": true,
+      "objectClass": "com.viettel.vocs.microchassis.topology.model.TopoLink"
+    }
+  }
+}

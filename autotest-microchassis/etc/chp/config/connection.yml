@@ -1,0 +1,35 @@
+clients: # to abm
+  - !!com.viettel.autotest.microchassis.connection.config.HttpClientOptions
+    id: hclient1
+    port: 9000
+    host: localhost
+    sendSync: true
+    protoConfigs:
+      HTTP/2.0:
+        - !!com.viettel.vocs.microchassis.http.config.Http2_0VersionConfigures
+          pingTimeoutMs: 3000
+  - !!com.viettel.autotest.microchassis.connection.config.HttpClientOptions
+    id: hclient2
+    port: 9000
+    host: localhost
+    sendSync: true
+    protoConfigs:
+      HTTP/1.1:
+        - !!com.viettel.vocs.microchassis.http.config.Http1_1VersionConfigures
+          pingTimeoutMs: 3000
+  - !!com.viettel.autotest.microchassis.connection.config.ClientConfiguration
+    id: tcpClient1
+    port: 9001
+    host: localhost
+    sendSync: true
+  - !!com.viettel.autotest.microchassis.connection.config.ClientConfiguration
+    id: tcpClient2
+    port: 9001
+    host: localhost
+    sendSync: true
+servers:
+  - !!com.viettel.vocs.microchassis.http.config.HttpClientOptions
+    id: hServer
+    port: 9010
+  - id: tcpServer
+    port: 9011

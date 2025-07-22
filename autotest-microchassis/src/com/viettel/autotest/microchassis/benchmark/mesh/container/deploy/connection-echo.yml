@@ -1,0 +1,10 @@
+!!com.viettel.vocs.microchassis.connection.config.ConnectionConfiguration
+servers:
+  - !!com.viettel.vocs.microchassis.http.iface.HttpServerOptions
+    id: ocs-hserver
+    port: 9013
+    sslConfiguration:
+      certPath: "echo-server.crt"
+      keyPath: "echo-pkcs8.key"
+      trustPath: "fw1-server.crt"
+      requireClientAuth: true

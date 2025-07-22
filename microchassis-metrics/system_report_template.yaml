@@ -1,0 +1,1412 @@
+report_for: 7d #optionnal
+collecting_period: 1d #optionnal
+at: #optional
+  hour: 0
+sheets:
+  #CHART
+  - name: 'Chart'
+    type: TABLE
+    display_chart: true
+    tables:
+      - table_name: 'Tỷ lệ xuất CDR từ OCS sang Billing (OCDB)'
+        queries:
+          - query_string:
+              label_replace((avg_over_time(1 - sum(request_pushfile_counter{command_name="all", pod_type="cdrpush", type="fail",  vnf_instance_name=~".*-hlc"})
+              /clamp_min(sum(request_pushfile_counter{command_name="all",pod_type="cdrpush",type="all", vnf_instance_name=~".*-hlc"}), 1)[1d:30s]))*100,
+              "site", "Site HLC", "", "")
+              or label_replace((avg_over_time(1 - sum(request_pushfile_counter{command_name="all", pod_type="cdrpush", type="fail",  vnf_instance_name=~".*-hht"})
+              /clamp_min(sum(request_pushfile_counter{command_name="all",pod_type="cdrpush",type="all", vnf_instance_name=~".*-hht"}), 1)[1d:30s]))*100,
+              "site", "Site HHT", "", "")
+            renaming_context: "$<site>"
+            description: xxx
+            ceiling_after_dot: 2
+      - table_name: 'Tỷ lệ đáp ứng lệnh Provisioning trên OCS (OCPC)'
+        queries:
+          - query_string:
+              label_replace(avg(avg_over_time((1 - sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="pro-hlc", service_type=~"Restful|Mml", type="request_income_timeout"}[30s])
+              + ignoring(type) rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="pro-hlc", service_type=~"Restful|Mml", type="request_income_drop"}[30s]))
+              / ignoring(type) clamp_min(sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="pro-hlc", service_type=~"Restful|Mml", type="request_income"}[30s])), 1))[1d:30s]))*100,
+              "site", "Site HLC", "", "")
+              or label_replace(avg(avg_over_time((1 - sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="pro-hht", service_type=~"Restful|Mml", type="request_income_timeout"}[30s])
+              + ignoring(type) rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="pro-hht", service_type=~"Restful|Mml", type="request_income_drop"}[30s]))
+              / ignoring(type) clamp_min(sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="pro-hht", service_type=~"Restful|Mml", type="request_income"}[30s])), 1))[1d:30s]))*100,
+              "site", "Site HHT", "", "")
+            renaming_context: "$<site>"
+            description: xxx
+            ceiling_after_dot: 2
+      - table_name: 'Tỷ lệ xử lý thành công bản tin dịch vụ thoại'
+        queries:
+          - query_string:
+              label_replace(avg(avg_over_time((1 - sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="voice-hlc", service_type=~"Voice", type="request_income_timeout"}[30s])
+              + ignoring(type) rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="voice-hlc", service_type=~"Voice", type="request_income_drop"}[30s]))
+              / ignoring(type) clamp_min(sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="voice-hlc", service_type=~"Voice", type="request_income"}[30s])), 1))[1d:30s]))*100,
+              "site", "site HLC", "", "")
+              or label_replace(avg(avg_over_time((1 - sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="voice-hht", service_type=~"Voice", type="request_income_timeout"}[30s])
+              + ignoring(type) rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="voice-hht", service_type=~"Voice", type="request_income_drop"}[30s]))
+              / ignoring(type) clamp_min(sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="voice-hht", service_type=~"Voice", type="request_income"}[30s])), 1))[1d:30s]))*100,
+              "site", "Site HHT", "", "")
+            renaming_context: "$<site>"
+            description: xxx
+            ceiling_after_dot: 2
+      - table_name: 'Tỷ lệ xử lý thành công bản tin dịch vụ data'
+        queries:
+          - query_string:
+              label_replace(avg(avg_over_time((1 - sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="data4g-hlc", service_type=~"Data|Data_4G|Pcrf", type="request_income_timeout"}[30s])
+              + ignoring(type) rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="data4g-hlc", service_type=~"Data|Data_4G|Pcrf", type="request_income_drop"}[30s]))
+              / ignoring(type) clamp_min(sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="data4g-hlc", service_type=~"Data|Data_4G|Pcrf", type="request_income"}[30s])), 1))[1d:30s]))*100,
+              "site", "site HLC", "", "")
+              or label_replace(avg(avg_over_time((1 - sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="data4g-hht", service_type=~"Data|Data_4G|Pcrf", type="request_income_timeout"}[30s])
+              + ignoring(type) rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="data4g-hht", service_type=~"Data|Data_4G|Pcrf", type="request_income_drop"}[30s]))
+              / ignoring(type) clamp_min(sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="data4g-hht", service_type=~"Data|Data_4G|Pcrf", type="request_income"}[30s])), 1))[1d:30s]))*100,
+              "site", "Site HHT", "", "")
+            renaming_context: "$<site>"
+            description: xxx
+            ceiling_after_dot: 2
+      - table_name: 'Tỷ lệ xử lý thành công bản tin dịch vụ volte'
+        queries:
+          - query_string:
+              label_replace(avg(avg_over_time((1 - sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="volte-hlc", service_type=~"Pcrf|Rx|Volte", type="request_income_timeout"}[30s])
+              + ignoring(type) rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="volte-hlc", service_type=~"Pcrf|Rx|Volte", type="request_income_drop"}[30s]))
+              / ignoring(type) clamp_min(sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="volte-hlc", service_type=~"Pcrf|Rx|Volte", type="request_income"}[30s])), 1))[1d:30s]))*100,
+              "site", "site HLC", "", "")
+              or label_replace(avg(avg_over_time((1 - sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="volte-hht", service_type=~"Pcrf|Rx|Volte", type="request_income_timeout"}[30s])
+              + ignoring(type) rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="volte-hht", service_type=~"Pcrf|Rx|Volte", type="request_income_drop"}[30s]))
+              / ignoring(type) clamp_min(sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="volte-hht", service_type=~"Pcrf|Rx|Volte", type="request_income"}[30s])), 1))[1d:30s]))*100,
+              "site", "Site HHT", "", "")
+            renaming_context: "$<site>"
+            description: xxx
+            ceiling_after_dot: 2
+      - table_name: 'Tỷ lệ xử lý thành công bản tin dịch vụ tin nhắn'
+        queries:
+          - query_string:
+              label_replace(avg(avg_over_time((1 - sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="event-hlc", service_type=~"Mms|Sms", type="request_income_timeout"}[30s])
+              + ignoring(type) rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="event-hlc", service_type=~"Mms|Sms", type="request_income_drop"}[30s]))
+              / ignoring(type) clamp_min(sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="event-hlc", service_type=~"Mms|Sms", type="request_income"}[30s])), 1))[1d:30s]))*100,
+              "site", "site HLC", "", "")
+              or label_replace(avg(avg_over_time((1 - sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="event-hht", service_type=~"Mms|Sms", type="request_income_timeout"}[30s])
+              + ignoring(type) rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="event-hht", service_type=~"Mms|Sms", type="request_income_drop"}[30s]))
+              / ignoring(type) clamp_min(sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="event-hht", service_type=~"Mms|Sms", type="request_income"}[30s])), 1))[1d:30s]))*100,
+              "site", "Site HHT", "", "")
+            renaming_context: "$<site>"
+            description: xxx
+            ceiling_after_dot: 2
+      - table_name: 'Tải sử dụng so với license (Max TPS trong ngày/Tải năng lực hệ thống) (%)'
+        queries:
+          - query_string:
+              label_replace(max_over_time(sum (rate(external_counter{vnf_instance_name=~".*-hlc", service_type=~"Data|Data_4G|Pcrf|Restful|Mml|Mms|Sms|Rx|Voice|Volte", type="request_income"}[30s]))[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0), "site", "Site HLC", "", "")/64*100
+              or label_replace(max_over_time(sum (rate(external_counter{vnf_instance_name=~".*-hht", service_type=~"Data|Data_4G|Pcrf|Restful|Mml|Mms|Sms|Rx|Voice|Volte", type="request_income"}[30s]))[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0), "site", "Site HHT", "", "")/64*100
+            renaming_context: "$<site>"
+            description: xxx
+            ceiling_after_dot: 2
+      - table_name: 'Tải xử lý RAM (%)'
+        queries:
+          - query_string:
+              avg by (site) (label_replace(100 - (avg_over_time(node_memory_MemAvailable_bytes{prometheusIp=~"10.208.73.217|10.208.73.218|10.208.73.219"}[1d:30s])/node_memory_MemTotal_bytes)*100,
+              "site", "site HLC", "", "")
+              or label_replace(100 - (avg_over_time(node_memory_MemAvailable_bytes{prometheusIp=~"10.208.74.25|10.208.74.26|10.208.74.27"}[1d:30s])/node_memory_MemTotal_bytes)*100,
+              "site", "Site HHT", "", ""))
+            renaming_context: "$<site>"
+            description: xxx
+            ceiling_after_dot: 2
+      - table_name: 'Tải xử lý CPU (%)'
+        queries:
+          - query_string:
+              avg by (site) (label_replace(avg by (instance) (100 - (avg_over_time (irate(node_cpu_seconds_total{mode="idle", prometheusIp=~"10.208.73.217|10.208.73.218|10.208.73.219"}[5m])[1d:30s]) * 100)),
+              "site", "site HLC", "", "")
+              or label_replace(avg by (instance) (100 - (avg_over_time (irate(node_cpu_seconds_total{mode="idle", prometheusIp=~"10.208.74.25|10.208.74.26|10.208.74.27"}[5m])[1d:30s]) * 100)),
+              "site", "site HHT", "", ""))
+            renaming_context: "$<site>"
+            description: xxx
+            ceiling_after_dot: 2
+      - table_name: 'Voice AvgResponseTime (ms)'
+        queries:
+          - query_string:
+              label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="voice-hlc", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Voice"} > 0))[1d:30s]
+              or on(service_type) (absent({unreal="true"})*0), "site", "site HLC", "", "")
+              or label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="voice-hht", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Voice"} > 0))[1d:30s]
+              or on(service_type) (absent({unreal="true"})*0), "site", "site HHT", "", "")
+            renaming_context: "$<site>"
+            description: xxx
+            ceiling_after_dot: 2
+      - table_name: 'Data AvgResponseTime (ms)'
+        queries:
+          - query_string:
+              label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="data4g-hlc", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Data"} > 0))[1d:30s]
+              or on(service_type) (absent({unreal="true"})*0), "site", "site HLC", "", "")
+              or label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="data4g-hht", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Data"} > 0))[1d:30s]
+              or on(service_type) (absent({unreal="true"})*0), "site", "site HHT", "", "")
+            renaming_context: "$<site>"
+            description: xxx
+            ceiling_after_dot: 2
+      - table_name: 'Data 4G AvgResponseTime (ms)'
+        queries:
+          - query_string:
+              label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="data4g-hlc", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Data_4G"} > 0))[1d:30s]
+              or on(service_type) (absent({unreal="true"})*0), "site", "site HLC", "", "")
+              or label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="data4g-hht", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Data_4G"} > 0))[1d:30s]
+              or on(service_type) (absent({unreal="true"})*0), "site", "site HHT", "", "")
+            renaming_context: "$<site>"
+            description: xxx
+            ceiling_after_dot: 2
+      - table_name: 'Pcrf AvgResponseTime (ms)'
+        queries:
+          - query_string:
+              label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="data4g-hlc", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Pcrf"} > 0))[1d:30s]
+              or on(service_type) (absent({unreal="true"})*0), "site", "site HLC", "", "")
+              or label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="data4g-hht", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Pcrf"} > 0))[1d:30s]
+              or on(service_type) (absent({unreal="true"})*0), "site", "site HHT", "", "")
+            renaming_context: "$<site>"
+            description: xxx
+            ceiling_after_dot: 2
+      - table_name: 'Sms AvgResponseTime (ms)'
+        queries:
+          - query_string:
+              label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="event-hlc", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Sms"} > 0))[1d:30s]
+              or on(service_type) (absent({unreal="true"})*0), "site", "site HLC", "", "")
+              or label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="event-hht", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Sms"} > 0))[1d:30s]
+              or on(service_type) (absent({unreal="true"})*0), "site", "site HHT", "", "")
+            renaming_context: "$<site>"
+            description: xxx
+            ceiling_after_dot: 2
+      - table_name: 'Mms AvgResponseTime (ms)'
+        queries:
+          - query_string:
+              label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="event-hlc", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Mms"} > 0))[1d:30s]
+              or on(service_type) (absent({unreal="true"})*0), "site", "site HLC", "", "")
+              or label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="event-hht", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Mms"} > 0))[1d:30s]
+              or on(service_type) (absent({unreal="true"})*0), "site", "site HHT", "", "")
+            renaming_context: "$<site>"
+            description: xxx
+            ceiling_after_dot: 2
+      - table_name: 'Volte AvgResponseTime (ms)'
+        queries:
+          - query_string:
+              label_replace(avg(avg_over_time(avg(process_time_ms{vnf_instance_name="volte-hlc", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type=~"Pcrf|Rx|Volte"} > 0))[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0), "site", "site HLC", "", "")
+              or label_replace(avg(avg_over_time(avg(process_time_ms{vnf_instance_name="volte-hht", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Pcrf|Rx|Volte"} > 0))[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0), "site", "site HHT", "", "") or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "$<site>"
+            description: xxx
+            ceiling_after_dot: 2
+      - table_name: 'ABM AvgResponseTime (ms)'
+        queries:
+          - query_string:
+              label_replace(avg(avg_over_time(avg by (vnf_instance_name)(process_time{vnf_instance_name=~".*-hlc", type=~"avg", pod_type="abm", command_name=~"query|update"} > 0))[1d:30s]),
+              "site", "site HLC", "", "")
+              or label_replace(avg(avg_over_time(avg by (vnf_instance_name)(process_time{vnf_instance_name=~".*-hht", type=~"avg", pod_type="abm", command_name=~"query|update"} > 0))[1d:30s]),
+              "site", "site HHT", "", "")
+            renaming_context: "$<site>"
+            description: xxx
+            ceiling_after_dot: 2
+  #TPS
+  - name: 'TPS'
+    type: TABLE
+    display_chart: false
+    tables:
+      - table_name: 'SITE HLC'
+        queries:
+          - query_string:
+              round(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="data4g-hlc", service_type=~"Data|Data_4G|Pcrf", type="request_income"}[30s]))[1d:30s])
+              or on(service_type) (absent({unreal="true", service_type="Data"})*0)
+              or on(service_type) (absent({unreal="true", service_type="Data_4G"})*0)
+              or on(service_type) (absent({unreal="true", service_type="Pcrf"})*0))
+            renaming_context: "$<service_type>"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              round(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="voice-hlc", service_type=~"Voice", type="request_income"}[30s]))[1d:30s])
+              or on(service_type) (absent({unreal="true", service_type="Voice"})*0))
+            renaming_context: "$<service_type>"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              round(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="event-hlc", service_type=~"Sms|Mms", type="request_income"}[30s]))[1d:30s])
+              or on(service_type) (absent({unreal="true", service_type="Sms"})*0)
+              or on(service_type) (absent({unreal="true", service_type="Mms"})*0))
+            renaming_context: "$<service_type>"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              round(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="volte-hlc", service_type=~"Pcrf|Rx|Volte", type="request_income"}[30s]))[1d:30s])
+              or on(service_type) (absent({unreal="true", service_type="Pcrf"})*0)
+              or on(service_type) (absent({unreal="true", service_type="Rx"})*0)
+              or on(service_type) (absent({unreal="true", service_type="Volte"})*0))
+            renaming_context: "Volte $<service_type>"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              round(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="pro-hlc", service_type=~"Mml|Restful", type="request_income"}[30s]))[1d:30s])
+              or on(service_type) (absent({unreal="true", service_type="Mml"})*0)
+              or on(service_type) (absent({unreal="true", service_type="Restful"})*0))
+            renaming_context: "$<service_type>"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              round(max_over_time(sum (rate(external_counter{vnf_instance_name=~"pro-hlc|volte-hlc|event-hlc|voice-hlc|data4g-hlc",
+              service_type=~"Data|Data_4G|Pcrf|Restful|Mml|Mms|Sms|Rx|Voice|Volte", type="request_income"}[30s]))[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0))
+            renaming_context: "PEAK"
+            description: xxx
+            ceiling_after_dot: 2
+      - table_name: 'SITE HHT'
+        queries:
+          - query_string:
+              round(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="data4g-hht",
+              service_type=~"Data|Data_4G|Pcrf", type="request_income"}[30s]))[1d:30s])
+              or on(service_type) (absent({unreal="true", service_type="Data"})*0)
+              or on(service_type) (absent({unreal="true", service_type="Data_4G"})*0)
+              or on(service_type) (absent({unreal="true", service_type="Pcrf"})*0))
+            renaming_context: "$<service_type>"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              round(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="voice-hht",
+              service_type=~"Voice", type="request_income"}[30s]))[1d:30s])
+              or on(service_type) (absent({unreal="true", service_type="Voice"})*0))
+            renaming_context: "$<service_type>"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              round(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="event-hht",
+              service_type=~"Sms|Mms", type="request_income"}[30s]))[1d:30s])
+              or on(service_type) (absent({unreal="true", service_type="Mms"})*0)
+              or on(service_type) (absent({unreal="true", service_type="Sms"})*0))
+            renaming_context: "$<service_type>"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="volte-hht", service_type=~"Pcrf|Rx|Volte", type="request_income"}[30s]))[1d:30s])
+              or on(service_type) (absent({unreal="true", service_type="Pcrf"})*0)
+              or on(service_type) (absent({unreal="true", service_type="Rx"})*0)
+              or on(service_type) (absent({unreal="true", service_type="Volte"})*0)
+            renaming_context: "Volte $<service_type>"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              round(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="pro-hht", service_type=~"Mml|Restful", type="request_income"}[30s]))[1d:30s])
+              or on(service_type) (absent({unreal="true", service_type="Mml"})*0)
+              or on(service_type) (absent({unreal="true", service_type="Restful"})*0))
+            renaming_context: "$<service_type>"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              round(max_over_time(sum (rate(external_counter{vnf_instance_name=~"data4g-hht|event-hht|voice-hht|volte-hht|pro-hht",
+              service_type=~"Data|Data_4G|Pcrf|Restful|Mml|Mms|Sms|Rx|Voice|Volte", type="request_income"}[30s]))[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0))
+            renaming_context: "PEAK"
+            description: xxx
+            ceiling_after_dot: 2
+  #CGW
+  - name: 'Response Time CGW'
+    type: TABLE
+    display_chart: false
+    tables:
+      - table_name: 'SITE HLC'
+        queries:
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="data4g-hlc", type="avg", command_name="All", service_type="Data"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Data"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="data4g-hlc", type="avg", command_name="All", service_type="Data_4G"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Data 4G"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="data4g-hlc", type="avg", command_name="All", service_type="Pcrf"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Pcrf"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="voice-hlc", type="avg", command_name="All", service_type="Voice"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Voice"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="event-hlc", type="avg", command_name="All", service_type="Sms"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Sms"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="event-hlc", type="avg", command_name="All", service_type="Mms"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Mms"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="volte-hlc", type="avg", command_name="All", service_type="Pcrf"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Volte Pcrf"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="volte-hlc", type="avg", command_name="All", service_type="Rx"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Volte Rx"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="volte-hlc", type="avg", command_name="All", service_type="Volte"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Volte Volte"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="pro-hlc", type="avg", command_name="All", service_type="Mml"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Mml"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="pro-hlc", type="avg", command_name="All", service_type="Restful"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Restful"
+            description: xxx
+            ceiling_after_dot: 2
+      - table_name: 'SITE HHT'
+        queries:
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="data4g-hht", type="avg", command_name="All", service_type="Data"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Data"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="data4g-hht", type="avg", command_name="All", service_type="Data_4G"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Data 4G"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="data4g-hht", type="avg", command_name="All", service_type="Pcrf"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Pcrf"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="voice-hht", type="avg", command_name="All", service_type="Voice"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Voice"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="event-hht", type="avg", command_name="All", service_type="Sms"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Sms"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="event-hht", type="avg", command_name="All", service_type="Mms"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Mms"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="volte-hht", type="avg", command_name="All", service_type="Pcrf"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Volte Pcrf"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="volte-hht", type="avg", command_name="All", service_type="Rx"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Volte Rx"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="volte-hht", type="avg", command_name="All", service_type="Volte"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Volte Volte"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="pro-hht", type="avg", command_name="All", service_type="Mml"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Mml"
+            description: xxx
+            ceiling_after_dot: 2
+          - query_string:
+              avg_over_time(avg(process_time_ms{vnf_instance_name="pro-hht", type="avg", command_name="All", service_type="Restful"}>0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "Restful"
+            description: xxx
+            ceiling_after_dot: 2
+  #ABM
+  - name: 'Response Time ABM'
+    type: TABLE
+    display_chart: false
+    tables:
+      - table_name: 'SITE HLC'
+        queries:
+          - query_string:
+              avg_over_time(avg by (vnf_instance_name)(process_time{vnf_instance_name=~".*-hlc", vnf_instance_name!~"data5g.*", type=~"avg", pod_type="abm", command_name=~"query|update"} > 0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "$<vnf_instance_name>"
+            description: xxx
+            ceiling_after_dot: 2
+      - table_name: 'SITE HHT'
+        queries:
+          - query_string:
+              avg_over_time(avg by (vnf_instance_name)(process_time{vnf_instance_name=~".*-hht", vnf_instance_name!~"data5g.*", type=~"avg", pod_type="abm", command_name=~"query|update"} > 0)[1d:30s])
+              or on(service_type) (absent({unreal="true"})*0)
+            renaming_context: "$<vnf_instance_name>"
+            description: xxx
+            ceiling_after_dot: 2
+  #Tuan
+  - name: 'Tuần$<w>-$<y>'
+    type: REVIEW
+    headline: 'TUẦN NÀY'
+    term: 0
+    titles:
+      - value: 'Hệ thống'
+      - value: 'Node'
+      - value: 'Tên KPI'
+    custom:
+      query_result_header_text: 'Kết quả đo KPI thực tế'
+      result_header_text: 'Đánh giá'
+      number_text: 'STT'
+      pass: 'Đạt'
+      fail: 'Không đạt'
+    rules:
+      - labels:
+          - value: 'OCS'
+          - value: 'OCS'
+          - value: 'Tỷ lệ xuất CDR từ OCS sang Billing (OCDB)'
+        unit: '%'
+        expr:
+          queries:
+            - query_string:
+                label_replace((avg_over_time(1 - sum(request_pushfile_counter{command_name="all", pod_type="cdrpush", type="fail",  vnf_instance_name=~".*-hlc"})
+                / clamp_min(sum(request_pushfile_counter{command_name="all",pod_type="cdrpush",type="all", vnf_instance_name=~".*-hlc"}), 1)[7d:30s]))*100,
+                "site", "Site HLC", "", "")
+              renaming_context: "$<site>"
+            - query_string:
+                label_replace((avg_over_time(1 - sum(request_pushfile_counter{command_name="all", pod_type="cdrpush", type="fail",  vnf_instance_name=~".*-hht"})
+                / clamp_min(sum(request_pushfile_counter{command_name="all",pod_type="cdrpush",type="all", vnf_instance_name=~".*-hht"}), 1)[7d:30s]))*100,
+                "site", "Site HHT", "", "")
+              renaming_context: "$<site>"
+          operator: '=='
+          threshold: 100
+      - labels:
+          - value: 'OCS'
+          - value: 'OCS'
+          - value: 'Tỷ lệ đáp ứng lệnh Provisioning trên OCS (OCPC)'
+        unit: '%'
+        expr:
+          queries:
+            - query_string:
+                label_replace(avg(avg_over_time((1 - sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="pro-hlc", service_type=~"Restful|Mml", type="request_income_timeout"}[30s])
+                + ignoring(type) rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="pro-hlc", service_type=~"Restful|Mml", type="request_income_drop"}[30s]))
+                / ignoring(type) clamp_min(sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="pro-hlc", service_type=~"Restful|Mml", type="request_income"}[30s])), 1))[7d:30s]))*100,
+                "site", "Site HLC", "", "")
+              renaming_context: "$<site>"
+            - query_string:
+                label_replace(avg(avg_over_time((1 - sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="pro-hht", service_type=~"Restful|Mml", type="request_income_timeout"}[30s])
+                + ignoring(type) rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="pro-hht", service_type=~"Restful|Mml", type="request_income_drop"}[30s]))
+                / ignoring(type) clamp_min(sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="pro-hht", service_type=~"Restful|Mml", type="request_income"}[30s])), 1))[7d:30s]))*100,
+                "site", "Site HHT", "", "")
+              renaming_context: "$<site>"
+          operator: '>='
+          threshold: 99
+      - labels:
+          - value: 'OCS'
+          - value: 'OCS'
+          - value: 'Tỷ lệ xử lý thành công bản tin dịch vụ thoại'
+        unit: '%'
+        expr:
+          queries:
+            - query_string:
+                label_replace(avg(avg_over_time((1 - sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="voice-hlc", service_type=~"Voice", type="request_income_timeout"}[30s])
+                + ignoring(type) rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="voice-hlc", service_type=~"Voice", type="request_income_drop"}[30s]))
+                / ignoring(type) clamp_min(sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="voice-hlc", service_type=~"Voice", type="request_income"}[30s])), 1))[7d:30s]))*100,
+                "site", "Site HLC", "", "")
+              renaming_context: "$<site>"
+            - query_string:
+                label_replace(avg(avg_over_time((1 - sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="voice-hht", service_type=~"Voice", type="request_income_timeout"}[30s])
+                + ignoring(type) rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="voice-hht", service_type=~"Voice", type="request_income_drop"}[30s]))
+                / ignoring(type) clamp_min(sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="voice-hht", service_type=~"Voice", type="request_income"}[30s])), 1))[7d:30s]))*100,
+                "site", "Site HHT", "", "")
+              renaming_context: "$<site>"
+          operator: '>='
+          threshold: 99
+      - labels:
+          - value: 'OCS'
+          - value: 'OCS'
+          - value: 'Tỷ lệ xử lý thành công bản tin dịch vụ data'
+        unit: '%'
+        expr:
+          queries:
+            - query_string:
+                label_replace(avg(avg_over_time((1 - sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="data4g-hlc", service_type=~"Data|Data_4G|Pcrf", type="request_income_timeout"}[30s])
+                + ignoring(type) rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="data4g-hlc", service_type=~"Data|Data_4G|Pcrf", type="request_income_drop"}[30s]))
+                / ignoring(type) clamp_min(sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="data4g-hlc", service_type=~"Data|Data_4G|Pcrf", type="request_income"}[30s])), 1))[7d:30s]))*100,
+                "site", "Site HLC", "", "")
+              renaming_context: "$<site>"
+            - query_string:
+                label_replace(avg(avg_over_time((1 - sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="data4g-hht", service_type=~"Data|Data_4G|Pcrf", type="request_income_timeout"}[30s])
+                + ignoring(type) rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="data4g-hht", service_type=~"Data|Data_4G|Pcrf", type="request_income_drop"}[30s]))
+                / ignoring(type) clamp_min(sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="data4g-hht", service_type=~"Data|Data_4G|Pcrf", type="request_income"}[30s])), 1))[7d:30s]))*100,
+                "site", "Site HHT", "", "")
+              renaming_context: "$<site>"
+          operator: '>='
+          threshold: 99
+      - labels:
+          - value: 'OCS'
+          - value: 'OCS'
+          - value: 'Tỷ lệ xử lý thành công bản tin dịch vụ volte'
+        unit: '%'
+        expr:
+          queries:
+            - query_string:
+                label_replace(avg(avg_over_time((1 - sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="volte-hlc", service_type=~"Pcrf|Rx|Volte", type="request_income_timeout"}[30s])
+                + ignoring(type) rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="volte-hlc", service_type=~"Pcrf|Rx|Volte", type="request_income_drop"}[30s]))
+                / ignoring(type) clamp_min(sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="volte-hlc", service_type=~"Pcrf|Rx|Volte", type="request_income"}[30s])), 1))[7d:30s]))*100,
+                "site", "Site HLC", "", "")
+              renaming_context: "$<site>"
+            - query_string:
+                label_replace(avg(avg_over_time((1 - sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="volte-hht", service_type=~"Pcrf|Rx|Volte", type="request_income_timeout"}[30s])
+                + ignoring(type) rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="volte-hht", service_type=~"Pcrf|Rx|Volte", type="request_income_drop"}[30s]))
+                / ignoring(type) clamp_min(sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="volte-hht", service_type=~"Pcrf|Rx|Volte", type="request_income"}[30s])), 1))[7d:30s]))*100,
+                "site", "Site HHT", "", "")
+              renaming_context: "$<site>"
+          operator: '>='
+          threshold: 99
+      - labels:
+          - value: 'OCS'
+          - value: 'OCS'
+          - value: 'Tỷ lệ xử lý thành công bản tin dịch vụ tin nhắn'
+        unit: '%'
+        expr:
+          queries:
+            - query_string:
+                label_replace(avg(avg_over_time((1 - sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="event-hlc", service_type=~"Mms|Sms", type="request_income_timeout"}[30s])
+                + ignoring(type) rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="event-hlc", service_type=~"Mms|Sms", type="request_income_drop"}[30s]))
+                / ignoring(type) clamp_min(sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="event-hlc", service_type=~"Mms|Sms", type="request_income"}[30s])), 1))[7d:30s]))*100,
+                "site", "Site HLC", "", "")
+              renaming_context: "$<site>"
+            - query_string:
+                label_replace(avg(avg_over_time((1 - sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="event-hht", service_type=~"Mms|Sms", type="request_income_timeout"}[30s])
+                + ignoring(type) rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="event-hht", service_type=~"Mms|Sms", type="request_income_drop"}[30s]))
+                / ignoring(type) clamp_min(sum by (pod_type, service_type) (rate(external_counter{pod_type=~"cgw.*", vnf_instance_name="event-hht", service_type=~"Mms|Sms", type="request_income"}[30s])), 1))[7d:30s]))*100,
+                "site", "Site HHT", "", "")
+              renaming_context: "$<site>"
+          operator: '>='
+          threshold: 99
+      - labels:
+          - value: 'OCS'
+          - value: 'OCS'
+          - value: 'Tải xử lý CPU (%)'
+        unit: '%'
+        expr:
+          queries:
+            - query_string:
+                avg by (site) (label_replace(avg by (instance) (100 - (avg_over_time (irate(node_cpu_seconds_total{mode="idle", prometheusIp=~"10.208.73.217|10.208.73.218|10.208.73.219"}[5m])[7d:30s]) * 100)),
+                "site", "Site HLC", "", ""))
+              renaming_context: "$<site>"
+            - query_string:
+                avg by (site) (label_replace(avg by (instance) (100 - (avg_over_time (irate(node_cpu_seconds_total{mode="idle", prometheusIp=~"10.208.74.25|10.208.74.26|10.208.74.27"}[5m])[7d:30s]) * 100)),
+                "site", "Site HHT", "", ""))
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 75
+      - labels:
+          - value: 'OCS'
+          - value: 'OCS'
+          - value: 'Tải bộ nhớ RAM '
+        unit: '%'
+        expr:
+          queries:
+            - query_string:
+                avg by (site) (label_replace(100 - (avg_over_time(node_memory_MemAvailable_bytes{prometheusIp=~"10.208.73.217|10.208.73.218|10.208.73.219"}[7d:30s])/node_memory_MemTotal_bytes)*100,
+                "site", "Site HLC", "", ""))
+              renaming_context: "$<site>"
+            - query_string:
+                avg by (site) (label_replace(100 - (avg_over_time(node_memory_MemAvailable_bytes{prometheusIp=~"10.208.74.25|10.208.74.26|10.208.74.27"}[7d:30s])/node_memory_MemTotal_bytes)*100,
+                "site", "Site HHT", "", ""))
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 80
+      - labels:
+          - value: 'OCS'
+          - value: 'ABM'
+          - value: 'ABMAvgResponseTime'
+        unit: 'ms'
+        expr:
+          queries:
+            - query_string:
+                label_replace(avg(avg_over_time(avg by (vnf_instance_name)(process_time{vnf_instance_name=~".*-hlc", type=~"avg", pod_type="abm", command_name=~"query|update"} > 0))[7d:30s]),
+                "site", "Site HLC", "", "")
+              renaming_context: "$<site>"
+            - query_string:
+                label_replace(avg(avg_over_time(avg by (vnf_instance_name)(process_time{vnf_instance_name=~".*-hht", type=~"avg", pod_type="abm", command_name=~"query|update"} > 0))[7d:30s]),
+                "site", "Site HHT", "", "")
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 3
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'VoiceAvgResponseTime'
+        unit: 'ms'
+        expr:
+          queries:
+            - query_string:
+                label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="voice-hlc", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Voice"} > 0))[7d:30s]
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HLC", "", "")
+              renaming_context: "$<site>"
+            - query_string:
+                label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="voice-hht", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Voice"} > 0))[7d:30s]
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HHT", "", "")
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 100
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'DataAvgResponseTime'
+        unit: 'ms'
+        expr:
+          queries:
+            - query_string:
+                label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="data4g-hlc", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Data"} > 0))[7d:30s]
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HLC", "", "")
+              renaming_context: "$<site>"
+            - query_string:
+                label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="data4g-hht", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Data"} > 0))[7d:30s]
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HHT", "", "")
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 100
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'Data4GAvgResponseTime'
+        unit: 'ms'
+        expr:
+          queries:
+            - query_string:
+                label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="data4g-hlc", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Data_4G"} > 0))[7d:30s]
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HLC", "", "")
+              renaming_context: "$<site>"
+            - query_string:
+                label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="data4g-hht", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Data_4G"} > 0))[7d:30s]
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HHT", "", "")
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 100
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'PcrfAvgResponseTime'
+        unit: 'ms'
+        expr:
+          queries:
+            - query_string:
+                label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="data4g-hlc", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Pcrf"} > 0))[7d:30s]
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HLC", "", "")
+              renaming_context: "$<site>"
+            - query_string:
+                label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="data4g-hht", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Pcrf"} > 0))[7d:30s]
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HHT", "", "")
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 100
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'SmsAvgResponseTime'
+        unit: 'ms'
+        expr:
+          queries:
+            - query_string:
+                label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="event-hlc", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Sms"} > 0)[7d:30s])
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HLC", "", "")
+              renaming_context: "$<site>"
+            - query_string:
+                label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="event-hht", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Sms"} > 0))[7d:30s]
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HHT", "", "")
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 100
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'MmsAvgResponseTime'
+        unit: 'ms'
+        expr:
+          queries:
+            - query_string:
+                label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="event-hlc", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Mms"} > 0))[7d:30s]
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HLC", "", "")
+              renaming_context: "$<site>"
+            - query_string:
+                label_replace(avg_over_time(avg(process_time_ms{vnf_instance_name="event-hht", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Mms"} > 0))[7d:30s]
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HHT", "", "")
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 100
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'VolteAvgResponseTime'
+        unit: 'ms'
+        expr:
+          queries:
+            - query_string:
+                label_replace(avg(avg_over_time(avg(process_time_ms{vnf_instance_name="volte-hlc", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Volte"} > 0))[7d:30s])
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HLC", "", "")
+              renaming_context: "$<site>"
+            - query_string:
+                label_replace(avg(avg_over_time(avg(process_time_ms{vnf_instance_name="volte-hht", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Volte"} > 0))[7d:30s])
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HHT", "", "") or on(service_type) (absent({unreal="true"})*0)
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 100
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'RxAvgResponseTime'
+        unit: 'ms'
+        expr:
+          queries:
+            - query_string:
+                label_replace(avg(avg_over_time(avg(process_time_ms{vnf_instance_name="volte-hlc", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Rx"} > 0))[7d:30s])
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HLC", "", "")
+              renaming_context: "$<site>"
+            - query_string:
+                label_replace(avg(avg_over_time(avg(process_time_ms{vnf_instance_name="volte-hht", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Rx"} > 0))[7d:30s])
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HHT", "", "") or on(service_type) (absent({unreal="true"})*0)
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 100
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'VoltePcrfAvgResponseTime'
+        unit: 'ms'
+        expr:
+          queries:
+            - query_string:
+                label_replace(avg(avg_over_time(avg(process_time_ms{vnf_instance_name="volte-hlc", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Pcrf"} > 0))[7d:30s])
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HLC", "", "")
+              renaming_context: "$<site>"
+            - query_string:
+                label_replace(avg(avg_over_time(avg(process_time_ms{vnf_instance_name="volte-hht", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Pcrf"} > 0))[7d:30s])
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HHT", "", "") or on(service_type) (absent({unreal="true"})*0)
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 100
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'MmlAvgResponseTime'
+        unit: 'ms'
+        expr:
+          queries:
+            - query_string:
+                label_replace(avg(avg_over_time(avg(process_time_ms{vnf_instance_name="pro-hlc", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Mml"} > 0))[7d:30s])
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HLC", "", "")
+              renaming_context: "$<site>"
+            - query_string:
+                label_replace(avg(avg_over_time(avg(process_time_ms{vnf_instance_name="pro-hht", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Mml"} > 0))[7d:30s])
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HHT", "", "") or on(service_type) (absent({unreal="true"})*0)
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 100
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'RestfulAvgResponseTime'
+        unit: 'ms'
+        expr:
+          queries:
+            - query_string:
+                label_replace(avg(avg_over_time(avg(process_time_ms{vnf_instance_name="pro-hlc", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Restful"} > 0))[7d:30s])
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HLC", "", "")
+              renaming_context: "$<site>"
+            - query_string:
+                label_replace(avg(avg_over_time(avg(process_time_ms{vnf_instance_name="pro-hht", type=~"avg", pod_type=~".*cgw.*", command_name="All", service_type="Restful"} > 0))[7d:30s])
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HHT", "", "") or on(service_type) (absent({unreal="true"})*0)
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 100
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'Tải sử dụng (Max TPS trong ngày)'
+        unit: ''
+        expr:
+          queries:
+            - query_string:
+                round(label_replace(max_over_time(sum (rate(external_counter{vnf_instance_name=~".*-hlc",
+                service_type=~"Data|Data_4G|Pcrf|Restful|Mml|Mms|Sms|Rx|Voice|Volte", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HLC", "", ""))
+              renaming_context: "$<site>"
+            - query_string:
+                round(label_replace(max_over_time(sum (rate(external_counter{vnf_instance_name=~".*-hht",
+                service_type=~"Data|Data_4G|Pcrf|Restful|Mml|Mms|Sms|Rx|Voice|Volte", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HHT", "", ""))
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 64
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'Tải sử dụng so với license (Max TPS trong ngày/Tải năng lực hệ thống)'
+        unit: '%'
+        expr:
+          queries:
+            - query_string:
+                label_replace(max_over_time(sum (rate(external_counter{vnf_instance_name=~".*-hlc",
+                service_type=~"Data|Data_4G|Pcrf|Restful|Mml|Mms|Sms|Rx|Voice|Volte", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HLC", "", "")/64*100
+              renaming_context: "$<site>"
+            - query_string:
+                label_replace(max_over_time(sum (rate(external_counter{vnf_instance_name=~".*-hht",
+                service_type=~"Data|Data_4G|Pcrf|Restful|Mml|Mms|Sms|Rx|Voice|Volte", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true"})*0), "site", "Site HHT", "", "")/64*100
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 75
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'TpsVoice'
+        unit: ''
+        expr:
+          queries:
+            - query_string:
+                round(label_replace(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="voice-hlc", service_type="Voice", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true", service_type="Voice"})*0), "site", "Site HLC", "", ""))
+              renaming_context: "$<site>"
+            - query_string:
+                round(label_replace(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="voice-hht", service_type="Voice", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true", service_type="Voice"})*0), "site", "Site HHT", "", ""))
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 6
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'TpsSMS'
+        unit: ''
+        expr:
+          queries:
+            - query_string:
+                round(label_replace(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="event-hlc", service_type="Sms", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true", service_type="Sms"})*0), "site", "Site HLC", "", ""))
+              renaming_context: "$<site>"
+            - query_string:
+                round(label_replace(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="event-hht", service_type="Sms", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true", service_type="Sms"})*0), "site", "Site HHT", "", ""))
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 3
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'TpsData'
+        unit: ''
+        expr:
+          queries:
+            - query_string:
+                round(label_replace(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="data4g-hlc", service_type="Data", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true", service_type="Data"})*0), "site", "Site HLC", "", ""))
+              renaming_context: "$<site>"
+            - query_string:
+                round(label_replace(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="data4g-hht", service_type="Data", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true", service_type="Data"})*0), "site", "Site HHT", "", ""))
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 6
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'TpsData4G'
+        unit: ''
+        expr:
+          queries:
+            - query_string:
+                round(label_replace(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="data4g-hlc", service_type="Data_4G", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true", service_type="Data_4G"})*0), "site", "Site HLC", "", ""))
+              renaming_context: "$<site>"
+            - query_string:
+                round(label_replace(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="data4g-hht", service_type="Data_4G", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true", service_type="Data_4G"})*0), "site", "Site HHT", "", ""))
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 3
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'TpsPcrf'
+        unit: ''
+        expr:
+          queries:
+            - query_string:
+                round(label_replace(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="data4g-hlc", service_type="Pcrf", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true", service_type="Pcrf"})*0), "site", "Site HLC", "", ""))
+              renaming_context: "$<site>"
+            - query_string:
+                round(label_replace(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="data4g-hht", service_type="Pcrf", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true", service_type="Pcrf"})*0), "site", "Site HHT", "", ""))
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 9
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'TpsVolte'
+        unit: ''
+        expr:
+          queries:
+            - query_string:
+                round(label_replace(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="volte-hlc", service_type="Volte", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true", service_type="Volte"})*0), "site", "Site HLC", "", ""))
+              renaming_context: "$<site>"
+            - query_string:
+                round(label_replace(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="volte-hht", service_type="Volte", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true", service_type="Volte"})*0), "site", "Site HHT", "", ""))
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 5
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'TpsVoltePcrf'
+        unit: ''
+        expr:
+          queries:
+            - query_string:
+                round(label_replace(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="volte-hlc", service_type="Pcrf", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true", service_type="Pcrf"})*0), "site", "Site HLC", "", ""))
+              renaming_context: "$<site>"
+            - query_string:
+                round(label_replace(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="volte-hht", service_type="Pcrf", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true", service_type="Pcrf"})*0), "site", "Site HHT", "", ""))
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 3
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'TpsVolteRx'
+        unit: ''
+        expr:
+          queries:
+            - query_string:
+                round(label_replace(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="volte-hlc", service_type="Rx", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true", service_type="Rx"})*0), "site", "Site HLC", "", ""))
+              renaming_context: "$<site>"
+            - query_string:
+                round(label_replace(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="volte-hht", service_type="Rx", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true", service_type="Rx"})*0), "site", "Site HHT", "", ""))
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 3
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'TpsMML'
+        unit: ''
+        expr:
+          queries:
+            - query_string:
+                round(label_replace(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="pro-hlc", service_type="Mml", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true", service_type="Mml"})*0), "site", "Site HLC", "", ""))
+              renaming_context: "$<site>"
+            - query_string:
+                round(label_replace(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="pro-hht", service_type="Mml", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true", service_type="Mml"})*0), "site", "Site HHT", "", ""))
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 3
+      - labels:
+          - value: 'OCS'
+          - value: 'CGW'
+          - value: 'TpsRestful'
+        unit: ''
+        expr:
+          queries:
+            - query_string:
+                round(label_replace(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="pro-hlc", service_type="Restful", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true", service_type="Restful"})*0), "site", "Site HLC", "", ""))
+              renaming_context: "$<site>"
+            - query_string:
+                round(label_replace(max_over_time(sum by (service_type)(rate(external_counter{vnf_instance_name="pro-hht", service_type="Restful", type="request_income"}[30s]))[7d:30s])
+                or on(service_type) (absent({unreal="true", service_type="Restful"})*0), "site", "Site HHT", "", ""))
+              renaming_context: "$<site>"
+          operator: '<='
+          threshold: 7
+  #SUBS
+  - name: SUBS
+    type: TABLE
+    display_chart: false
+    tables:
+      - table_name: SITE HLC
+        queries:
+          - query_string: sum(sub_counter{vnf_instance_name="offline-hlc", type="all"} or 0)
+            renaming_context: TOTAL_SUB
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: sum(sub_counter{vnf_instance_name="offline-hlc", type=~"3.*"} or 0)
+            renaming_context: TOTAL_ACTIVE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: sum(sub_counter{vnf_instance_name="offline-hlc", type=~"2.*"} or 0)
+            renaming_context: TOTAL_IDLE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: sum(sub_counter{vnf_instance_name="offline-hlc", type=~"4.*"} or 0)
+            renaming_context: TOTAL_SUSPEND
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: sum(sub_counter{vnf_instance_name="offline-hlc", type=~"6.*"} or 0)
+            renaming_context: TOTAL_DISABLE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: sum(sub_counter{vnf_instance_name="offline-hlc", type=~"9.*"} or 0)
+            renaming_context: TOTAL_TERMINATE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: increase((sum(sub_counter{vnf_instance_name="offline-hlc", type=~"3.*"} or 0))[1d])
+            renaming_context: TOTAL_ACTIVE_INDAY
+            description: xxx
+            ceiling_after_dot: 0
+      - table_name: SITE HHT
+        queries:
+          - query_string: sum(sub_counter{vnf_instance_name="offline-hht", type="all"} or 0)
+            renaming_context: TOTAL_SUB
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: sum(sub_counter{vnf_instance_name="offline-hht", type=~"3.*"} or 0)
+            renaming_context: TOTAL_ACTIVE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: sum(sub_counter{vnf_instance_name="offline-hht", type=~"2.*"} or 0)
+            renaming_context: TOTAL_IDLE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: sum(sub_counter{vnf_instance_name="offline-hht", type=~"4.*"} or 0)
+            renaming_context: TOTAL_SUSPEND
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: sum(sub_counter{vnf_instance_name="offline-hht", type=~"6.*"} or 0)
+            renaming_context: TOTAL_DISABLE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: sum(sub_counter{vnf_instance_name="offline-hht", type=~"9.*"} or 0)
+            renaming_context: TOTAL_TERMINATE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: increase((sum(sub_counter{vnf_instance_name="offline-hht", type=~"9.*"} or 0))[1d])
+            renaming_context: TOTAL_ACTIVE_INDAY
+            description: xxx
+            ceiling_after_dot: 0
+  #AERO_STORAGE_HLC
+  - name: AERO_STORAGE_HLC
+    type: TABLE
+    display_chart: false
+    tables:
+      - table_name: OBJECT_SUBSCRIBER_SET
+        queries:
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="Subscriber", type="numberObject", cluster="6"})
+            renaming_context: SUBSCRIBER_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="Balance", type="numberObject", cluster="6"})
+            renaming_context: BALANCE_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="AcmBalance", type="numberObject", cluster="6"})
+            renaming_context: ACM_BALANCE_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="Characteristic", type="numberObject", cluster="6"})
+            renaming_context: CHARACTERISTIC_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="Group", type="numberObject", cluster="6"})
+            renaming_context: GROUP_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="History", type="numberObject", cluster="6"})
+            renaming_context: HISTORY_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="Product", type="numberObject", cluster="6"})
+            renaming_context: PRODUCT_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="RGInfo", type="numberObject", cluster="6"})
+            renaming_context: RG_INFO_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="SessionExpTime", type="numberObject", cluster="6"})
+            renaming_context: SESSION_EXP_TIME_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="SessionInfo", type="numberObject", cluster="6"})
+            renaming_context: SESSION_INFO_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="timeout-ctl", type="numberObject", cluster="6"})
+            renaming_context: TIMEOUT_CTL_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+      - table_name: SIZE_SUBSCRIBER_SET
+        queries:
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="Subscriber", type="binSize", cluster="6"})
+            renaming_context: SUBSCRIBER_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="Balance", type="binSize", cluster="6"})
+            renaming_context: BALANCE_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="AcmBalance", type="binSize", cluster="6"})
+            renaming_context: ACM_BALANCE_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="Characteristic", type="binSize", cluster="6"})
+            renaming_context: CHARACTERISTIC_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="Group", type="binSize", cluster="6"})
+            renaming_context: GROUP_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="History", type="binSize", cluster="6"})
+            renaming_context: HISTORY_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="Product", type="binSize", cluster="6"})
+            renaming_context: PRODUCT_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="RGInfo", type="binSize", cluster="6"})
+            renaming_context: RG_INFO_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="SessionExpTime", type="binSize", cluster="6"})
+            renaming_context: SESSION_EXP_TIME_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="SessionInfo", type="binSize", cluster="6"})
+            renaming_context: SESSION_INFO_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", setName="Subscriber", binName="timeout-ctl", type="binSize", cluster="6"})
+            renaming_context: TIMEOUT_CTL_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+      - table_name: OBJECT_NAMESPACE
+        queries:
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", namespace="vOCS",  type="numberObject", cluster="6"}))
+            renaming_context: vOCS_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", namespace="GlobalShare",  type="numberObject", cluster="6"}))
+            renaming_context: GlobalShare_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", namespace="BGRR",  type="numberObject", cluster="6"}))
+            renaming_context: BGRR_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", namespace="SMRR",  type="numberObject", cluster="6"}))
+            renaming_context: SMRR_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", namespace="GlobalCaching",  type="numberObject", cluster="6"}))
+            renaming_context: Global_Caching_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc",  type="numberObject", cluster="6"}))
+            renaming_context: TOTAL_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+      - table_name: SIZE_NAMESPACE
+        queries:
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", namespace="vOCS",  type="binSize", cluster="6"}))
+            renaming_context: vOCS_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", namespace="GlobalShare",  type="binSize", cluster="6"}))
+            renaming_context: GlobalShare_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", namespace="BGRR",  type="binSize", cluster="6"}))
+            renaming_context: BGRR_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", namespace="SMRR",  type="binSize", cluster="6"}))
+            renaming_context: SMRR_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc", namespace="GlobalCaching",  type="binSize", cluster="6"}))
+            renaming_context: Global_Caching_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hlc",  type="binSize", cluster="6"}))
+            renaming_context: TOTAL_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+  #AERO_STORAGE_HHT
+  - name: AERO_STORAGE_HHT
+    type: TABLE
+    display_chart: false
+    tables:
+      - table_name: OBJECT_SUBSCRIBER_SET
+        queries:
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="Subscriber", type="numberObject", cluster="7"})
+            renaming_context: SUBSCRIBER_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="Balance", type="numberObject", cluster="7"})
+            renaming_context: BALANCE_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="AcmBalance", type="numberObject", cluster="7"})
+            renaming_context: ACM_BALANCE_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="Characteristic", type="numberObject", cluster="7"})
+            renaming_context: CHARACTERISTIC_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="Group", type="numberObject", cluster="7"})
+            renaming_context: GROUP_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="History", type="numberObject", cluster="7"})
+            renaming_context: HISTORY_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="Product", type="numberObject", cluster="7"})
+            renaming_context: PRODUCT_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="RGInfo", type="numberObject", cluster="7"})
+            renaming_context: RG_INFO_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="SessionExpTime", type="numberObject", cluster="7"})
+            renaming_context: SESSION_EXP_TIME_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="SessionInfo", type="numberObject", cluster="7"})
+            renaming_context: SESSION_INFO_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="timeout-ctl", type="numberObject", cluster="7"})
+            renaming_context: TIMEOUT_CTL_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+      - table_name: SIZE_SUBSCRIBER_SET
+        queries:
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="Subscriber", type="binSize", cluster="7"})
+            renaming_context: SUBSCRIBER_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="Balance", type="binSize", cluster="7"})
+            renaming_context: BALANCE_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="AcmBalance", type="binSize", cluster="7"})
+            renaming_context: ACM_BALANCE_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="Characteristic", type="binSize", cluster="7"})
+            renaming_context: CHARACTERISTIC_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="Group", type="binSize", cluster="7"})
+            renaming_context: GROUP_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="History", type="binSize", cluster="7"})
+            renaming_context: HISTORY_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="Product", type="binSize", cluster="7"})
+            renaming_context: PRODUCT_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="RGInfo", type="binSize", cluster="7"})
+            renaming_context: RG_INFO_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="SessionExpTime", type="binSize", cluster="7"})
+            renaming_context: SESSION_EXP_TIME_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="SessionInfo", type="binSize", cluster="7"})
+            renaming_context: SESSION_INFO_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", setName="Subscriber", binName="timeout-ctl", type="binSize", cluster="7"})
+            renaming_context: TIMEOUT_CTL_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+      - table_name: OBJECT_NAMESPACE
+        queries:
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", namespace="vOCS",  type="numberObject", cluster="7"}))
+            renaming_context: vOCS_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", namespace="GlobalShare",  type="numberObject", cluster="7"}))
+            renaming_context: GlobalShare_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", namespace="BGRR",  type="numberObject", cluster="7"}))
+            renaming_context: BGRR_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", namespace="SMRR",  type="numberObject", cluster="7"}))
+            renaming_context: SMRR_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", namespace="GlobalCaching",  type="numberObject", cluster="7"}))
+            renaming_context: Global_Caching_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht",  type="numberObject", cluster="7"}))
+            renaming_context: TOTAL_OBJECT
+            description: xxx
+            ceiling_after_dot: 0
+      - table_name: SIZE_NAMESPACE
+        queries:
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", namespace="vOCS",  type="binSize", cluster="7"}))
+            renaming_context: vOCS_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", namespace="GlobalShare",  type="binSize", cluster="7"}))
+            renaming_context: GlobalShare_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", namespace="BGRR",  type="binSize", cluster="7"}))
+            renaming_context: BGRR_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", namespace="SMRR",  type="binSize", cluster="7"}))
+            renaming_context: SMRR_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht", namespace="GlobalCaching",  type="binSize", cluster="7"}))
+            renaming_context: Global_Caching_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+          - query_string: avg(sum by (instance)(aeorospike_size_info{vnf_instance_name="webapp-ocs-hht",  type="binSize", cluster="7"}))
+            renaming_context: TOTAL_SIZE
+            description: xxx
+            ceiling_after_dot: 0
+

@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: microchassis-inner1
+spec:
+  clusterIP: None
+  selector:
+    app: microchassis-inner1
+  ports:
+    - port: 13001
+      targetPort: 13001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microchassis-inner1
+  labels:
+    app: microchassis-inner1
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: microchassis-inner1
+  template:
+    metadata:
+      labels:
+        app: microchassis-inner1
+    spec:
+      containers:
+        - name: microchassis-inner1
+          image: docker-registry:4000/tiennn18-microchassis:latest
+          imagePullPolicy: Always
+          readinessProbe:
+            tcpSocket:
+              port: 13001
+            initialDelaySeconds: 5
+            periodSeconds: 1
+          command: ["java"]
+          args: ["-Xmx1700m", "-jar",
+            # client config
+                 "-DclientMode=async",
+                 "-DpayloadSize=4096",
+                 "-DfakeTPS=5000",
+                 "-DcPort=13000", "-DcHost=microchassis-back",
+            ## Traffic limiter
+                 "-DmaxAllowTPS=400000",
+                 "-DmaxTPS=0",
+                 "-DmaxConcurrent=0",
+                 "-DmaxRequest=0",
+          # server config
+                 "-DsPort=13001",
+                 "-Dnumprocess=2",
+          # general
+                 "-DserviceType=inner",
+                 "-DintervalStatistic=1000", "-Dlog4j.configurationFile=/mesh/mesh-log4j2.xml",
+                 "/mesh/microchassis-mesh-jar-with-dependencies.jar"]
+          resources:
+            requests:
+              memory: 2Gi
+              cpu: 1
+            limits:
+              memory: 2Gi
+              cpu: 1
+  strategy:
+    type: Recreate

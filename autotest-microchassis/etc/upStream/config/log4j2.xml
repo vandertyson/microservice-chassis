@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="10">
+    <properties>
+        <property name="pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} [%L] %c{1.} [%p] [%t] %msg%n</property>
+    </properties>
+    <Appenders>
+        <Console name="STDOUT">
+            <PatternLayout pattern="[%d{yyMMdd:HHmmss.SSS} %p#%L@%c{1.}$%t] %msg%n"/>
+            <ThresholdFilter level="DEBUG"/>
+        </Console>
+        <RollingFile name="APP" fileName="./logs/allUp.log" filePattern="./logs/all.log.%d{MM-dd-yyyy}.gz">
+            <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout>
+                <pattern>[%d{yyMMdd:HHmmss.SSS} %p#%L@%c{1.}$%t] %msg%n</pattern>
+            </PatternLayout>
+            <TimeBasedTriggeringPolicy/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="STDOUT"/>
+        </Root>
+        <Logger name="com.viettel" level="debug" additivity="false">
+            <AppenderRef ref="APP"/>
+        </Logger>
+        <Logger name="com.viettel.vocs.common.log" level="debug" additivity="false">
+            <AppenderRef ref="APP"/>
+            <AppenderRef ref="STDOUT"/>
+        </Logger>
+        <Logger name="com.viettel.vocs.microchassis.connection.loadbalancing" level="debug" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="APP"/>
+        </Logger>
+<!--        <Logger name="com.viettel.vocs.microchassis" level="debug" additivity="false">-->
+<!--            <AppenderRef ref="APP"/>-->
+<!--        </Logger>-->
+    </Loggers>
+</Configuration>
+        <!--
+        java -Xmx1700m -jar -DmaxAllowTPS=400000 -DmaxTPS=0 -DintervalStatistic=1000 -Dlog4j.configurationFile=/mesh/mesh-log4j2.xml  -DserviceType=back -DmaxRequest=0 -DsPort=13000 /mesh/microchassis-mesh-jar-with-dependencies.jar
+        -->

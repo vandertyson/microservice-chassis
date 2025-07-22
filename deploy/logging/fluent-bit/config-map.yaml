@@ -1,0 +1,197 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+  namespace: microservices-chassis
+  labels:
+    k8s-app: fluent-bit
+data:
+  # Configuration files: server, input, filters and output
+  # ======================================================
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush                       1
+        Log_Level                   info
+        Daemon                      off
+        Parsers_File                parsers.conf
+        HTTP_Server                 On
+        HTTP_Listen                 0.0.0.0
+        HTTP_Port                   2020
+        # -------------------------------
+        # storage.path                /var/log/flb-storage/
+        # storage.sync                normal
+        # storage.checksum            off
+        # storage.max_chunks_up       300
+        # storage.backlog.mem_limit   500M
+        # storage.metrics             on
+
+    @INCLUDE input-kubernetes.conf
+    @INCLUDE filter-kubernetes.conf
+    @INCLUDE output-elasticsearch.conf
+
+  input-kubernetes.conf: |
+    [INPUT]
+        Name                tail
+        Tag                 kube.*
+        Path                /u01/data/log-storage/*.log
+        # Exclude_Path        /home/vinhcx2/logs/scp-out/*1.log
+        Path_Key            log_path
+        DB                  /var/log/flb_kube.db
+        Buffer_Chunk_Size   32k
+        Buffer_Max_Size     32k
+        Mem_Buf_Limit       500MB
+        Skip_Long_Lines     Off
+        Rotate_Wait         5
+        # Parser              json
+        Refresh_Interval    3
+        Multiline           On
+        Parser_Firstline    loglineocs
+        Key                 message
+        # storage.type        filesystem
+        
+    # [INPUT]
+    #     Name                tail
+    #     Tag                 kube.*
+    #     Path                /var/log/containers/*.log
+    #     DB                  /var/log/flb_kube.db
+    #     # Buffer_Chunk_Size   50k
+    #     # Buffer_Max_Size     50k
+    #     Mem_Buf_Limit       50MB
+    #     Skip_Long_Lines     Off
+    #     Refresh_Interval    10
+    #     Docker_Mode         On
+    #     Docker_Mode_Parser  docker_multi_line
+
+  filter-kubernetes.conf: |
+    # [FILTER]
+    #     Name                kubernetes
+    #     Match               kube.*
+    #     Kube_URL            https://kubernetes.default.svc:443
+    #     Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    #     Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
+    #     Kube_Tag_Prefix     kube.var.log.containers.
+    #     Merge_Log           On
+    #     Merge_Log_Trim      On
+    #     # Merge_Parser        logline
+    #     # Merge_Log_Key       log_processed
+    #     Keep_Log            Off
+    #     K8S-Logging.Parser  Off
+    #     K8S-Logging.Exclude Off
+    #     Annotations         Off
+
+    [FILTER]
+        Name                kubernetes
+        Match               kube.*
+        Kube_URL            https://kubernetes.default.svc:443
+        Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
+        Kube_Tag_Prefix     kube.u01.data.log-storage.
+        Merge_Log           On
+        Merge_Log_Trim      On
+        # Merge_Parser        logline
+        # Merge_Log_Key       log_processed
+        Keep_Log            Off
+        K8S-Logging.Parser  Off
+        K8S-Logging.Exclude Off
+        Annotations         Off
+        Regex_Parser        pod_info
+
+    [FILTER]
+        Name            parser
+        Match           kube.*
+        Key_Name        log_path
+        Parser          parse_filename
+        Preserve_Key    False
+        Reserve_Data    True
+        Unescape_Key    False
+
+    # [FILTER]
+    #     Name            modify
+    #     Match           kube.*
+    #     Remove          stream
+    #     Remove          time
+
+    # [FILTER]
+    #     Name            modify
+    #     Match           log.scp
+    #     Add             kubernetes.labels.app server
+    #     Add             kubernetes.labels.version v1
+    #     Add             kubernetes.container.name server
+    #     Add             kubernetes.pod.name server-5d996bdcbb-fznrs
+    #     Add             kubernetes.namespace production
+    #     Add             host.name worker01
+    #     Add             host.ip 192.16.31.6
+
+    # [FILTER]
+    #     Name            parser
+    #     Match           kube.*
+    #     Key_Name        log
+    #     Parser          logline
+    #     Preserve_Key    False
+    #     Reserve_Data    True
+    #     Unescape_Key    False
+
+    # [OUTPUT]
+    #     Name file
+    #     Match *
+    #     Path /home/vinhcx2/filebeat
+    #     File fluentbit.txt
+
+  output-elasticsearch.conf: |
+    [OUTPUT]
+        Name                        es
+        Match                       *
+        Host                        ${FLUENT_ELASTICSEARCH_HOST}
+        Port                        ${FLUENT_ELASTICSEARCH_PORT}
+        Index                       log-fluentbit
+        Logstash_Format             Off
+        Replace_Dots                Off
+        Generate_ID                 Off
+        Retry_Limit                 3
+        # storage.total_limit_size    200M
+
+  parsers.conf: |
+    [PARSER]
+        Name        pod_info
+        Format      regex
+        Regex       (?<pod_name>[a-z0-9](?:[-a-z0-9]*[a-z0-9])?(?:\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*)_(?<namespace_name>[^_]+)_(?<container_name>.+)_(?<docker_id>.+)_.*\.log$
+        # Regex       (?<pod_name>[a-z0-9](?:[-a-z0-9]*[a-z0-9])?(?:\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*)_(?<namespace_name>[^_]+)_(?<container_name>.+)_(?<docker_id>.+)_(?<file_name>.*)\.log$
+
+    [PARSER]
+        Name        parse_filename
+        Format      regex
+        Regex       .*_(?<file_name>.+)\.log$
+
+    [PARSER]
+        Name        logline
+        Format      regex
+        Regex       ^["]*(?<time>[\d\/]+-[\d:\.]+)\s+(?<thread>[^ ]+)\s+(?<severity>\w+)\s+(?<logger>[^ ]+)\s+(?<message>(.|\n)*)$
+        Time_Key    timestamp
+        Time_Format %Y/%m/%d-%H:%M:%S.%L
+        Time_Keep   Off
+
+    [PARSER]
+        Name        loglineocs
+        Format      regex
+        Regex       ^(?<timestamp>[\d\/]+\s[\d:]+)\s+(?<severity>\w+)\s+(?<thread>[^ ]+)\s+(?<logger>[^ ]+)\s+(?<message>(.|\n)*)$
+        Time_Key    timestamp
+        Time_Format %d/%m/%Y %H:%M:%S
+        Time_Keep   Off
+
+    # [PARSER]
+    #     Name        docker_multi_line
+    #     Format      regex
+    #     Regex       (?<log>^{"log":"[\d\/]+-[\d:\.+]+(.|\n)*)
+
+    # [PARSER]
+    #     Name        json
+    #     Format      json
+    #     Time_Key    time
+    #     Time_Format %d/%b/%Y:%H:%M:%S %z
+
+    # [PARSER]
+    #     Name        docker
+    #     Format      json
+    #     Time_Key    time
+    #     Time_Format %Y-%m-%dT%H:%M:%S.%L
+    #     Time_Keep   On

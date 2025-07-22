@@ -1,0 +1,21 @@
+top - 14:15:50 up 68 days, 23:14,  8 users,  load average: 0.61, 0.67, 0.70
+Tasks:   3 total,   0 running,   3 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  5.9 us,  4.4 sy,  0.0 ni, 89.4 id,  0.2 wa,  0.0 hi,  0.1 si,  0.0 st
+KiB Mem :  8156888 total,  1058292 free,  6430784 used,   667812 buff/cache
+KiB Swap:        0 total,        0 free,        0 used.  1206900 avail Mem 
+
+   PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+ 28434 vttek     20   0 1809128 163332  25224 S   0.0  2.0   1080:49 thread_queue
+ 28464 vttek     20   0 1809128 163332  25224 S   0.0  2.0   1080:49 threaded-ml
+ 28469 vttek     20   0 1809128 163332  25224 S   0.0  2.0   1080:49 process_status
+
+top - 14:15:51 up 68 days, 23:14,  8 users,  load average: 0.61, 0.67, 0.70
+Tasks:   3 total,   0 running,   3 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  8.0 us,  5.0 sy,  0.0 ni, 86.7 id,  0.0 wa,  0.0 hi,  0.3 si,  0.0 st
+KiB Mem :  8156888 total,  1058292 free,  6430784 used,   667812 buff/cache
+KiB Swap:        0 total,        0 free,        0 used.  1206900 avail Mem 
+
+   PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+ 28434 vttek     20   0 1809128 163332  25224 S   5.0  2.0   1080:49 thread_queue
+ 28464 vttek     20   0 1809128 163332  25224 S   5.0  2.0   1080:49 threaded-ml
+ 28469 vttek     20   0 1809128 163332  25224 S   5.0  2.0   1080:49 process_status

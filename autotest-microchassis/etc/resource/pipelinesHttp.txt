@@ -1,0 +1,6 @@
+(HttpServerInitializer#0 = com.viettel.vocs.microchassis.http.server.HttpServerInitializer),
+(CleartextHttp2ServerUpgradeHandler#0 = io.netty.handler.codec.http2.CleartextHttp2ServerUpgradeHandler),
+(HttpServerCodec#0 = io.netty.handler.codec.http.HttpServerCodec),
+(HttpServerUpgradeHandler#0 = io.netty.handler.codec.http.HttpServerUpgradeHandler),
+(HttpServerInitializer$Http2SSettingsHandler#0 = com.viettel.vocs.microchassis.http.server.HttpServerInitializer$Http2SSettingsHandler),
+(HttpServerInitializer$2#0 = com.viettel.vocs.microchassis.http.server.HttpServerInitializer$2)

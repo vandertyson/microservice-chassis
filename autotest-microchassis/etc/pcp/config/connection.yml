@@ -1,0 +1,46 @@
+clients: # to itself, for benchmark
+- !!com.viettel.vocs.microchassis.http.config.HttpClientOptions
+  id: h2client
+  port: 9000
+  host: 192.168.1.1
+- !!com.viettel.vocs.microchassis.http.config.HttpClientOptions
+  id: h1client
+  port: 9000
+  host: localhost
+- id: tcpClient
+  port: 9001
+  host: localhost
+- id: abmClient
+  port: 8131
+  host: abm
+  connectionPerIP: 2
+  routeStrategy:
+#    !!com.viettel.vocs.microchassis.connection.loadbalancing.configure.RPL
+#    # [Front][HTTP prefer] RR based, connection Pooled RouteStrategy. Configure with connectionPerIp, is pool size
+#    logId: rpl
+#    !!com.viettel.vocs.microchassis.connection.loadbalancing.configure.RCP
+#    # [Front][HTTP/1.1 prefer] round robin cached pooled
+#    maxConnectionPerIp: 100 # set maxConnectionPerIp (def 200, is max create cache) > connectionPerIp (def 1, is min created) to enable cached pool feature
+#    !!com.viettel.vocs.microchassis.connection.loadbalancing.configure.RR
+#    # [Front][All]
+#    logId: rr
+#    !!com.viettel.vocs.microchassis.connection.loadbalancing.configure.LCC
+#    # [Front][All]
+#    logId: lcc
+#    !!com.viettel.vocs.microchassis.connection.loadbalancing.configure.BCC
+#    # [Back][All except HTTP/2.0]
+#    highload: 90  # tuned value
+#    controlWaitOnHighLoadOnly: true
+#    enableControlAtLoadPct: 60 # tuned value
+#    !!com.viettel.vocs.microchassis.connection.loadbalancing.configure.BTC
+#    # [Back][TCP]
+#    highload: 85 # tuned value
+#    initTPS: 500 # tuned value
+#    controlWaitOnHighLoadOnly: true
+#    enableControlAtLoadPct: 60 # tuned value
+servers:
+- !!com.viettel.vocs.microchassis.http.config.HttpServerOptions
+  id: hServer
+  port: 9000
+- id: tcpServer
+  port: 9001

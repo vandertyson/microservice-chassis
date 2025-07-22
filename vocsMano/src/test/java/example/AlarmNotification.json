@@ -1,0 +1,27 @@
+{
+  "_id": "0a537214-e25d-4366-8129-0a9e78073668",
+  "notificationType": "ALARM_NOTIFICATION",
+  "timeStamp": 1614738095262,
+  "alarm": {
+    "_id": "92c82254-2881-4dfd-a2bc-ed683349c80b",
+    "managedObjectId": "",
+    "managedObjectName": "",
+    "alarmRaisedTime": 0,
+    "alarmChangedTime": 0,
+    "alarmClearedTime": 0,
+    "ackState": "UNACKNOWLEDGED",
+    "perceivedSeverity": "WARNING",
+    "eventTime": 1614738095262,
+    "eventType": "COMMUNICATIONS_ALARM",
+    "faultType": "VNF_INSTANCE",
+    "probableCause": "This is new exception",
+    "isRootCause": false,
+    "faultDetails": [],
+    "metaData": {
+      "hostName": "ubuntu-vinhcx2",
+      "hostIp": "127.0.0.1",
+      "serviceName": "CHP-service"
+    }
+  },
+  "alarmType": "VNF_OBJECT"
+}

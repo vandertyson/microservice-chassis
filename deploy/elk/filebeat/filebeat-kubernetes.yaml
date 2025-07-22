@@ -1,0 +1,198 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: filebeat-config
+  namespace: microservices-chassis
+  labels:
+    k8s-app: filebeat
+data:
+  filebeat.yml: |-
+    logging.level: info
+    filebeat.inputs:
+    - type: log
+      paths:
+        - /u01/data/log-storage/*.log
+      harvester_buffer_size: 32768
+      # index: "myfilebeat-"
+      scan_frequency: 3s
+      # processors:
+      #   - add_kubernetes_metadata:
+      #       host: ${NODE_NAME}
+      #       matchers:
+      #       - logs_path:
+      #           logs_path: "/var/log/containers/"
+
+    # To enable hints based autodiscover, remove `filebeat.inputs` configuration and uncomment this:
+    # filebeat.autodiscover:
+    #  providers:
+    #    - type: kubernetes
+    #      node: ${NODE_NAME}
+    #      hints.enabled: true
+    #      hints.default_config:
+    #        type: container
+    #        paths:
+    #          - /var/log/containers/*${data.kubernetes.container.id}.log
+
+    processors:
+      - drop_fields:
+          fields: ["host","agent","input","ecs","log"]
+    #   - add_cloud_metadata:
+    #   - add_host_metadata:
+
+    queue.mem:
+      events: 50000
+      flush.min_events: 20000
+      flush.timeout: 5s
+
+    # setup.ilm.enabled: false
+    # setup.template.enabled: true
+    # setup.template.type: "legacy"
+    # setup.template.name: "myfilebeat"
+    # setup.template.pattern: "myfilebeat*"
+    # setup.template.overwrite: false
+    # setup.template.json.enabled: true
+    # setup.template.json.path: "/home/vinhcx2/tmp.json"
+    # setup.template.json.name: "myfilebeat"
+
+    # output.elasticsearch:
+    #   # index: "myfilebeat-%{[agent.version]}-%{+yyyy.MM.dd}"
+    #   bulk_max_size: 50000
+    #   hosts: ["172.20.3.72:9200"]
+    #   # hosts: ["172.20.3.71:9200", "172.20.3.72:9200", "172.20.3.73:9200"]
+    #   # loadbalance: true
+    output.file:
+      path: "/home/vinhcx2/filebeat"
+      filename: tmp
+
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: filebeat
+  namespace: microservices-chassis
+  labels:
+    k8s-app: filebeat
+spec:
+  selector:
+    matchLabels:
+      k8s-app: filebeat
+  template:
+    metadata:
+      labels:
+        k8s-app: filebeat
+    spec:
+      serviceAccountName: filebeat
+      terminationGracePeriodSeconds: 30
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+      - name: filebeat
+        image: docker-registry:4000/docker.elastic.co/beats/filebeat:7.9.1
+        args: [
+          "-c", "/etc/filebeat.yml",
+          "-e",
+        ]
+        env:
+        # - name: ELASTICSEARCH_HOST
+        #   value: 172.20.3.71
+        # - name: ELASTICSEARCH_PORT
+        #   value: "9200"
+        # - name: ELASTICSEARCH_USERNAME
+        #   value: elastic
+        # - name: ELASTICSEARCH_PASSWORD
+        #   value: changeme
+        # - name: NODE_NAME
+        #   valueFrom:
+        #     fieldRef:
+        #       fieldPath: spec.nodeName
+        securityContext:
+          runAsUser: 0
+          # If using Red Hat OpenShift uncomment this:
+          #privileged: true
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 100Mi
+          limits:
+            cpu: 10000m
+            memory: 5Gi
+        volumeMounts:
+        - name: config
+          mountPath: /etc/filebeat.yml
+          readOnly: true
+          subPath: filebeat.yml
+        - name: data
+          mountPath: /usr/share/filebeat/data
+        - name: vinhcx2-test
+          mountPath: /home/vinhcx2
+        - name: vinhcx2-test2
+          mountPath: /u01/data/log-storage
+          readOnly: true
+        # - name: varlibdockercontainers
+        #   mountPath: /var/lib/docker/containers
+        #   readOnly: true
+        # - name: varlog
+        #   mountPath: /var/log
+        #   readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          defaultMode: 0640
+          name: filebeat-config
+      # - name: varlibdockercontainers
+      #   hostPath:
+      #     path: /var/lib/docker/containers
+      # - name: varlog
+      #   hostPath:
+      #     path: /var/log
+      # data folder stores a registry of read status for all files, so we don't send everything again on a Filebeat pod restart
+      - name: data
+        hostPath:
+          # When filebeat runs as non-root user, this directory needs to be writable by group (g+w).
+          path: /var/lib/filebeat-data
+          type: DirectoryOrCreate
+      - name: vinhcx2-test
+        hostPath:
+          path: /home/vinhcx2
+      - name: vinhcx2-test2
+        hostPath:
+          path: /u01/data/log-storage
+          
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: filebeat
+subjects:
+- kind: ServiceAccount
+  name: filebeat
+  namespace: microservices-chassis
+roleRef:
+  kind: ClusterRole
+  name: filebeat
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: filebeat
+  labels:
+    k8s-app: filebeat
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources:
+  - namespaces
+  - pods
+  verbs:
+  - get
+  - watch
+  - list
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: filebeat
+  namespace: microservices-chassis
+  labels:
+    k8s-app: filebeat
+ 

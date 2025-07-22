@@ -1,0 +1,75 @@
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: elasticsearch-external
+#   namespace: microservices-chassis
+#   # labels:
+#   #   app: elasticsearch-external
+#   #   service: elasticsearch-external 
+# spec:
+#   selector:
+#     kubernetes.io/service-name: elasticsearch-external
+#   ports:
+#     - protocol: TCP
+#       port: 9200
+#       targetPort: 9200
+# ---
+
+# apiVersion: discovery.k8s.io/v1beta1
+# kind: EndpointSlice
+# metadata:
+#   name: elasticsearch-external
+#   namespace: microservices-chassis
+#   labels:
+#     kubernetes.io/service-name: elasticsearch-external
+# addressType: IPv4
+# ports:
+#   - name: http
+#     protocol: TCP
+#     port: 9200
+# endpoints:
+#   - addresses:
+#       - "172.20.3.71"
+#     conditions:
+#       ready: true
+#     hostname: vocs40vim01
+#     topology:
+#       kubernetes.io/hostname: vocs40vim01
+       
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch-external
+  namespace: microservices-chassisl
+spec:
+  ports:
+    - protocol: TCP
+      port: 9200
+      targetPort: 9200
+---
+
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: elasticsearch-external
+  namespace: microservices-chassis
+subsets:
+  - addresses:
+      - ip: 172.20.3.71
+      - ip: 172.20.3.72
+      - ip: 172.20.3.73
+    ports:
+      - port: 9200
+  # - addresses:
+  #     - ip: 172.20.3.71
+  #   ports:
+  #     - port: 9200
+  # - addresses:
+  #     - ip: 172.20.3.72
+  #   ports:
+  #     - port: 9200
+  # - addresses:
+  #     - ip: 172.20.3.73
+  #   ports:
+  #     - port: 9200

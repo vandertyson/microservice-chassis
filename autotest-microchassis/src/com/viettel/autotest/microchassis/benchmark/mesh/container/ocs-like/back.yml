@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: microchassis-db
+spec:
+  clusterIP: None
+  selector:
+    app: microchassis-db
+#  type: NodePort
+  ports:
+    - port: 13000
+      targetPort: 13000
+#      nodePort: 9813
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microchassis-db
+  labels:
+    app: microchassis-db
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: microchassis-db
+  template:
+    metadata:
+      labels:
+        app: microchassis-db
+    spec:
+      nodeName: vocs40db02
+      containers:
+        - name: main
+          image: docker-registry:4000/tiennn18/microchassis-microservice:4.2
+          imagePullPolicy: Always
+          env:
+            - name: VNF_INSTANCE_NAME # deployment name
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: DNS_NAME # deployment name = service name
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          command: [ "java" ]
+          args: [ "-Xmx10G", # "-Xmx7200m",
+                  "-jar",
+            # mesh config
+                  "-DVDU_NAME=db",
+            # general
+                  "-DNUMBER_OF_CPU=6",
+                  "-DserviceType=db",
+                  "-Dname=Aerospike",
+                  "-DintervalStatistic=1000", "-Dlog4j.configurationFile=/mesh/mesh-log4j2.xml",
+                  "/mesh/microchassis-mesh-jar-with-dependencies.jar" ]
+          resources:
+            requests:
+              memory: 4Gi # 1Gi
+              cpu: 6
+            limits:
+              memory: 12Gi # 8Gi
+              cpu: 6
+  strategy:
+    type: Recreate

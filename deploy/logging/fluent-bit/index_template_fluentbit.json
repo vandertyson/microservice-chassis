@@ -1,0 +1,62 @@
+{
+  "index_patterns": [
+    "log-fluentbit*"
+  ],
+  "template": {
+    "settings": {
+      "index.number_of_shards": 3,
+      "index.number_of_replicas": 1,
+      "index.codec": "default",
+      "index.refresh_interval": "20s"
+    },
+    "mappings": {
+      "properties": {
+        "message": {
+          "type": "text",
+          "doc_values": false,
+          "index": false,
+          "norms": false
+        },
+        "log": {
+          "type": "text",
+          "doc_values": false,
+          "index": false,
+          "norms": false
+        }
+      },
+      "dynamic_templates": [
+        {
+          "integers": {
+            "match_mapping_type": "long",
+            "mapping": {
+              "type": "integer",
+              "index": true,
+              "doc_values": false
+            }
+          }
+        },
+        {
+          "dates": {
+            "match_mapping_type": "date",
+            "mapping": {
+              "type": "date",
+              "index": true,
+              "format": "dd/MM/yyyy HH:mm:ss||strict_date_optional_time||epoch_millis"
+            }
+          }
+        },
+        {
+          "strings": {
+            "match_mapping_type": "string",
+            "mapping": {
+              "type": "keyword",
+              "index": true,
+              "doc_values": false,
+              "norms": false
+            }
+          }
+        }
+      ]
+    }
+  }
+}

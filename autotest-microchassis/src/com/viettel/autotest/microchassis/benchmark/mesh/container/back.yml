@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: microchassis-db
+  labels:
+    app: microchassis-db
+spec:
+  clusterIP: None
+  selector:
+    app: microchassis-db
+#  type: NodePort
+  ports:
+    - port: 13007
+      targetPort: 13007
+#      nodePort: 13007
+---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: csde-microchassis-db-app
+#  labels:
+#    app: microchassis-db
+#spec:
+#  type: "ClusterIP"
+#  clusterIP: None
+#  selector:
+#    app: microchassis-db
+#    csde1: tiennn18-mesh_csde-microchassis-db-app_app-app
+#  ports:
+#    - port: 13007
+#      targetPort: 13007
+#---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microchassis-db
+  labels:
+    app: microchassis-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microchassis-db
+  template:
+    metadata:
+      labels:
+        app: microchassis-db
+#        csde1: tiennn18-mesh_csde-microchassis-db-app_app-app
+#      annotations:
+#        k8s.v1.cni.cncf.io/networks: '[{"name":"app-app-2","namespace":"default","interface":"app-app-2"} ,{"name":"app-app-1","namespace":"default","interface":"app-app-1"} ,{"name":"app-app","namespace":"default","interface":"app-app"}]'
+    spec:
+      nodeName: vocs40db02 # vocs40nfvi05 # vocs40db02
+      containers:
+        - name: main
+          image: docker-registry:4000/tiennn18/microchassis-microservice:4.2
+          imagePullPolicy: Always
+          env:
+            - name: VNF_INSTANCE_NAME # deployment name
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: DNS_NAME # deployment name = service name
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          command: [ "java" ]
+          args: [ "-Xmx10G", # "-Xmx7200m",
+                  "-jar",
+            # mesh config
+                  "-DVDU_NAME=db",
+            # general
+            # "-Dchassis.netty.channel.handler.pools=true",
+                  "-DTCP_WARMUP_ENABLE=true",
+                  "-DTCP_WARMUP_COUNT=100000",
+                  "-DNUMBER_OF_CPU=6",
+                  "-DserviceType=db",
+                  "-Dname=Aerospike",
+                  "-DintervalStatistic=1000", "-Dlog4j.configurationFile=/mesh/mesh-log4j2.xml",
+                  "/mesh/microchassis-mesh-jar-with-dependencies.jar" ]
+          resources:
+            requests:
+              memory: 4Gi # 1Gi
+              cpu: 6
+#              intel.com/app_app_1: "1"
+#              intel.com/app_app_2: "1"
+            limits:
+              memory: 12Gi
+              cpu: 6
+#              intel.com/app_app_1: "1"
+#              intel.com/app_app_2: "1"
+  strategy:
+    type: Recreate

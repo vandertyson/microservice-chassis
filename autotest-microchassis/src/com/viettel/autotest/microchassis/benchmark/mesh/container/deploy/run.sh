@@ -1,0 +1,1 @@
+java -Xmx1700m -jar -DqueueType=core -Dmesh.server.connection.max=10 -DVDU_NAME=db -Dmesh.type=fullmesh -DserviceType=inner1 -Dname=abm -DintervalStatistic=1000 -Dlog4j.configurationFile=./mesh-log4j2.xml ./microchassis-mesh-jar-with-dependencies.jar

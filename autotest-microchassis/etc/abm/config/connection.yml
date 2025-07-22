@@ -1,0 +1,7 @@
+servers:
+  - !!com.viettel.autotest.microchassis.connection.config.EchoHttpServerConfiguration
+    id: hServer
+    port: 9000
+  - !!com.viettel.autotest.microchassis.connection.config.EchoServerConfiguration
+    id: tcpServer
+    port: 9001

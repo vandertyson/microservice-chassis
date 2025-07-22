@@ -1,0 +1,46 @@
+{
+  "_id": "0e1321fb-204c-404c-afc1-d6a9e15e6deb",
+  "notificationType": "ALARM_NOTIFICATION",
+  "subscriptionId": "42b727a2-a252-4a93-888b-48b2420a3ebe",
+  "timeStamp": {
+    "$date": {
+      "$numberLong": "1604732690888"
+    }
+  },
+  "alarm": {
+    "_id": "600947e5-c56c-4ace-998b-95a02cf39ee5",
+    "managedObjectId": "d4838036-e7dc-4b00-84be-47fd2f2c2584",
+    "vnfcIds": [
+      "05225fe3-2b08-4971-80d8-eff992f246e2"
+    ],
+    "vnfcNames": [
+      "vnfm-63e3e6e62cad"
+    ],
+    "alarmRaisedTime": {
+      "$date": {
+        "$numberLong": "1604732690872"
+      }
+    },
+    "ackState": "UNACKNOWLEDGED",
+    "perceivedSeverity": "CRITICAL",
+    "eventTime": {
+      "$date": {
+        "$numberLong": "1604732690872"
+      }
+    },
+    "eventType": "COMMUNICATIONS_ALARM",
+    "faultType": "VNFC_INSTANCE",
+    "probableCause": "Vnfc with Id 05225fe3-2b08-4971-80d8-eff992f246e2 is ERROR",
+    "isRootCause": true,
+    "_link": {
+      "self": {
+        "href": "http://172.20.3.66:8800/vnffm/v1/alarms/600947e5-c56c-4ace-998b-95a02cf39ee5"
+      }
+    },
+    "metaData": {
+      "vnfInstanceName": "Tuyenlt6"
+    }
+  },
+  "alarmType": "VNF_OBJECT",
+  "_class": "com.viettel.nfv.vbase.etsi.data.management.fault.model.AlarmNotification"
+}

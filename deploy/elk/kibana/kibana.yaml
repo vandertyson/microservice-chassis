@@ -1,0 +1,36 @@
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: kibana
+  namespace: microservices-chassis
+spec:
+  version: 7.9.1
+  count: 1
+  elasticsearchRef:
+    name: elasticsearch
+  http:
+    service:
+      spec:
+        type: NodePort
+        ports:
+        - name: https
+          port: 5601
+          protocol: TCP
+          targetPort: 5601
+          nodePort: 31704
+  podTemplate:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      containers:
+      - name: kibana
+        image: docker-registry:4000/docker.elastic.co/kibana/kibana:7.9.1
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: 500Mi 
+            cpu: 1
+          limits:
+            memory: 5Gi
+            cpu: 10

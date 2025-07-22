@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: microchassis-abm
+spec:
+  clusterIP: None
+  selector:
+    app: microchassis-abm
+  ports:
+    - port: 13001
+      targetPort: 13001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microchassis-abm
+  labels:
+    app: microchassis-abm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microchassis-abm
+  template:
+    metadata:
+      labels:
+        app: microchassis-abm
+    spec:
+      nodeName: vocs40db03 # vocs40nfvi05 # vocs40nfvi02 # vocs40db03
+      containers:
+        - name: main
+          image: docker-registry:4000/tiennn18/microchassis-microservice:4.2
+          imagePullPolicy: Always
+          env:
+            - name: VNF_INSTANCE_NAME # deployment name
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: DNS_NAME # deployment name = service name
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          command: ["java"]
+          args: ["-Xmx3G", "-jar",
+            # client config
+                 "-DclientMode=async",
+            # mesh config
+                 "-DVDU_NAME=abm",
+            # general
+                 "-DTCP_WARMUP_ENABLE=true",
+                 "-DTCP_WARMUP_COUNT=100000",
+                 "-DNUMBER_OF_CPU=2",
+                 "-DserviceType=inner1",
+                 "-Dname=abm",
+                 "-DintervalStatistic=1000", "-Dlog4j.configurationFile=/mesh/mesh-log4j2.xml",
+                 "/mesh/microchassis-mesh-jar-with-dependencies.jar"]
+          resources:
+            requests:
+              memory: 4Gi
+              cpu: 2
+            limits:
+              memory: 4Gi
+              cpu: 2
+  strategy:
+    type: Recreate

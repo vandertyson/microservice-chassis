@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: microchassis-fw1
+  labels:
+    app: microchassis-fw1
+spec:
+#  clusterIP: None
+  selector:
+    app: microchassis-fw1
+  type: NodePort
+  ports:
+    - port: 9013
+      targetPort: 9013
+      nodePort: 9013
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microchassis-fw1
+  labels:
+    app: microchassis-fw1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microchassis-fw1
+  template:
+    metadata:
+      labels:
+        app: microchassis-fw1
+    spec:
+      #      nodeName: vocs40db02 # vocs40nfvi05 # vocs40db02
+      containers:
+        - name: main
+          image: docker-registry:4000/tiennn18/microchassis-microservice:4.0.goaway
+          imagePullPolicy: Always
+          env:
+            - name: VNF_INSTANCE_NAME # deployment name
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: DNS_NAME # deployment name = service name
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          command: [ "java" ]
+          args: [ "-Xmx1G", "-jar",
+            # mesh config
+                  "-DVDU_NAME=fw1",
+                  "-DNUMBER_OF_CPU=1",
+                  "-DintervalStatistic=1000",
+                  "-DconnectionPath=/mesh/connection-fw1.yml",
+                  "-Dlog4j.configurationFile=/mesh/log4j2.xml",
+                  "/mesh/microchassis-mesh-jar-with-dependencies.jar" ]
+          resources:
+            requests:
+              memory: 2Gi
+              cpu: 1
+            limits:
+              memory: 2Gi
+              cpu: 1
+  strategy:
+    type: Recreate

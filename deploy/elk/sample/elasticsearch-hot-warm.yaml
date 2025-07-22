@@ -1,0 +1,137 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: elasticsearch
+spec:
+  version: 7.9.1
+  nodeSets:
+  # dedicated master nodes
+  - name: master
+    count: 2
+    config:
+      node.master: true
+      node.data: false
+      node.ingest: false
+      node.remote_cluster_client: false
+    podTemplate:
+      metadata: 
+        labels:
+          app: elasticsearch-master
+      spec:
+        initContainers:
+        - name: sysctl
+          securityContext:
+            privileged: true
+          command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+        containers:
+        - name: elasticsearch-master
+          resources:
+            requests:
+              memory: 100Mi
+              cpu: 1
+            limits:
+              memory: 4Gi
+              cpu: 5
+          env:
+          - name: ES_JAVA_OPTS
+            value: "-Xms2g -Xmx2g"
+
+  # ingest-data nodes
+  - name: ingest-data-hot
+    count: 2
+    config:
+      node.master: false
+      node.data: true
+      node.ingest: true
+      node.attr.data: hot
+    podTemplate:
+      metadata: 
+        labels:
+          app: elasticsearch-data
+      spec:
+        initContainers:
+        - name: sysctl
+          securityContext:
+            privileged: true
+          command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+        containers:
+        - name: elasticsearch-data
+          resources:
+            requests:
+              memory: 100Mi
+              cpu: 1
+            limits:
+              memory: 16Gi
+              cpu: 5
+          env:
+          - name: ES_JAVA_OPTS
+            value: "-Xms2g -Xmx2g"
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: node.kubernetes.io/instance-type
+                  operator: In
+                  values:
+                  - highio
+    volumeClaimTemplates:
+    - metadata:
+        name: elasticsearch-data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: standard
+
+  # ingest-data nodes
+  - name: ingest-data-warm
+    count: 2
+    config:
+      node.master: false
+      node.data: true
+      node.ingest: true
+      node.attr.data: warm
+    podTemplate:
+      metadata: 
+        labels:
+          app: elasticsearch-data
+      spec:
+        initContainers:
+        - name: sysctl
+          securityContext:
+            privileged: true
+          command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+        containers:
+        - name: elasticsearch-data
+          resources:
+            requests:
+              memory: 100Mi
+              cpu: 1
+            limits:
+              memory: 16Gi
+              cpu: 5
+          env:
+          - name: ES_JAVA_OPTS
+            value: "-Xms2g -Xmx2g"
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: node.kubernetes.io/instance-type
+                  operator: In
+                  values:
+                  - highstorage
+    volumeClaimTemplates:
+    - metadata:
+        name: elasticsearch-data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: standard

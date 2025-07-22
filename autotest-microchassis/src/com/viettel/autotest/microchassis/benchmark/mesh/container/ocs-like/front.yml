@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microchassis-lb
+  labels:
+    app: microchassis-lb
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: microchassis-lb
+  template:
+    metadata:
+      labels:
+        app: microchassis-lb
+    spec:
+      nodeName: vocs40db01
+      containers:
+        - name: main
+          image: docker-registry:4000/tiennn18/microchassis-microservice:4.2
+          imagePullPolicy: Always
+          env:
+            - name: VNF_INSTANCE_NAME # deployment name
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: DNS_NAME # deployment name = service name
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          command: ["java"]
+          args: ["-Xmx3G", "-jar",
+          # server config
+                 "-DfakeTPS=18000",
+                 "-DpayloadSize=4096", # 4096
+                 "-DgenerateThreads=2",
+          # client config
+                 "-DclientMode=async",
+          # mesh config
+                 "-DVDU_NAME=lb",
+          # general
+                 "-DNUMBER_OF_CPU=8",
+                 "-DserviceType=gateway",
+                 "-Dname=lb",
+                 "-DintervalStatistic=1000", "-Dlog4j.configurationFile=/mesh/mesh-log4j2.xml",
+                 "/mesh/microchassis-mesh-jar-with-dependencies.jar"]
+          resources:
+            requests:
+              memory: 3Gi
+              cpu: 8
+            limits:
+              memory: 3Gi
+              cpu: 8
+  strategy:
+    type: Recreate

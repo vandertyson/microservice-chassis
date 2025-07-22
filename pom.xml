@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.viettel.vocs</groupId>
+        <artifactId>ocs4-bom</artifactId>
+        <version>4.5.2.1-SNAPSHOT</version>
+        <relativePath/>
+    </parent>
+    <artifactId>microservice-chassis</artifactId>
+    <version>4.5.2.1-SNAPSHOT</version>
+    <name>microservice-chassis</name>
+    <packaging>pom</packaging>
+    <description>Fix BTC by smooth CPU</description>
+
+    <properties>
+        <java.version>11</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.viettel.vocs</groupId>
+                <artifactId>vocs4.0-dependency</artifactId>
+                <version>4.0.5-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>com.viettel.vocs</groupId>
+            <artifactId>vocs-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-commons</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- add for deployment only -->
+    <distributionManagement>
+        <repository>
+            <id>vocs-mirror</id>
+            <name>Mirror of Archiva central</name>
+            <url>http://172.20.1.13:8090/repository/internal/</url>
+        </repository>
+    </distributionManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <release>11</release>
+                    <!--                    <excludes>-->
+                    <!--                        <exclude>**/example/*.java</exclude>-->
+                    <!--                    </excludes>-->
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.5.2</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <!--                            <mainClass>${main.class}</mainClass>-->
+                            <classpathPrefix>dependencies/</classpathPrefix>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.2</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeScope>compile</includeScope>
+                            <excludeScope>test</excludeScope>
+                            <outputDirectory>${project.build.directory}/dependencies/</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                    <runOrder>alphabetical</runOrder>
+                    <skipAfterFailureCount>1</skipAfterFailureCount>
+                    <argLine>-Xmx1G</argLine>
+                    <argLine>-XX:MaxDirectMemorySize=1024M</argLine>
+                    <systemPropertyVariables>
+                        <io.netty.leakDetection.level>PARANOID</io.netty.leakDetection.level>
+                        <!--                        <io.netty.leakDetection.targetRecords>100</io.netty.leakDetection.targetRecords>-->
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <modules>
+        <module>microchassis-connection</module>
+        <module>microchassis-exception</module>
+        <!--        <module>microchassis-logging</module>-->
+        <module>microchassis-metrics</module>
+        <!--        <module>microchassis-oauth</module>-->
+        <module>microchassis-tracing</module>
+        <module>vocsMano</module>
+        <module>mTopo</module>
+    </modules>
+</project>

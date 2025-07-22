@@ -1,0 +1,21 @@
+!!com.viettel.vocs.microchassis.connection.config.ConnectionConfiguration
+clients:
+  - host: abm
+    id: abm_query_client
+    port: 9001
+    maxConnection: 1
+    minConnection: 1
+    connectionLimitMode: bidirectional
+  - host: abm
+    id: abm_update_client
+    port: 9001
+    maxConnection: 1
+    minConnection: 1
+    connectionLimitMode: bidirectional
+servers:
+  - id: tcp-server-gw
+    port: 9003
+    connectionLimitMode: fullmesh
+  - !!com.viettel.vocs.microchassis.http.iface.HttpServerOptions
+    id: http-server
+    port: 9000

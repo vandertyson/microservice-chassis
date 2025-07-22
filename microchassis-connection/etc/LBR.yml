@@ -1,0 +1,6 @@
+!!com.viettel.vocs.microchassis.serviceRegistry.utils.ClusterLBConfiguration
+namespace:
+  - !!com.viettel.vocs.microchassis.serviceRegistry.utils.LbrConfiguration
+    id: data4g
+    port: 9001
+    assignMode: hash

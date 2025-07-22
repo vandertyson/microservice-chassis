@@ -1,0 +1,10 @@
+clients:
+  - !!com.viettel.vocs.microchassis.http.config.HttpClientOptions
+    id: manoClient
+    instance: true
+    host: localhost
+    port: 0
+servers:
+  - !!com.viettel.vocs.microchassis.http.config.HttpServerOptions
+    id: manoServer
+    port: 9000

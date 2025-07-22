@@ -1,0 +1,14 @@
+{
+  "name": "minions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "http2client.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "tiennn18",
+  "license": "ISC",
+  "publishConfig": {
+    "registry": "http://172.20.1.22:8081/repository/npm-proxy/"
+  }
+}

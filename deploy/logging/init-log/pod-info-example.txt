@@ -1,0 +1,191 @@
+{
+  "kind": "Pod",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "jaeger-operator-764ffb64b6-8lchq",
+    "generateName": "jaeger-operator-764ffb64b6-",
+    "namespace": "microservices-chassis",
+    "selfLink": "/api/v1/namespaces/microservices-chassis/pods/jaeger-operator-764ffb64b6-8lchq",
+    "uid": "5a8714df-e3d9-4b69-84cb-23851b95fed9",
+    "resourceVersion": "9120787",
+    "creationTimestamp": "2020-12-01T02:25:37Z",
+    "labels": {
+      "name": "jaeger-operator",
+      "pod-template-hash": "764ffb64b6"
+    },
+    "annotations": {
+      "k8s.v1.cni.cncf.io/networks-status": "[{\n    \"name\": \"cbr0\",\n    \"interface\": \"eth0\",\n    \"ips\": [\n        \"10.244.1.151\"\n    ],\n    \"mac\": \"e6:36:59:e0:97:82\",\n    \"dns\": {},\n    \"default-route\": [\n        \"10.244.1.1\"\n    ]\n}]"
+    },
+    "ownerReferences": [
+      {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "jaeger-operator-764ffb64b6",
+        "uid": "7c49be1a-ab11-4833-a492-cbdc1700b19c",
+        "controller": true,
+        "blockOwnerDeletion": true
+      }
+    ]
+  },
+  "spec": {
+    "volumes": [
+      {
+        "name": "jaeger-operator-token-2mtb4",
+        "secret": {
+          "secretName": "jaeger-operator-token-2mtb4",
+          "defaultMode": 420
+        }
+      }
+    ],
+    "containers": [
+      {
+        "name": "jaeger-operator",
+        "image": "docker-registry:4000/jaegertracing/jaeger-operator:1.20.0",
+        "args": [
+          "start"
+        ],
+        "ports": [
+          {
+            "name": "http-metrics",
+            "containerPort": 8383,
+            "protocol": "TCP"
+          },
+          {
+            "name": "cr-metrics",
+            "containerPort": 8686,
+            "protocol": "TCP"
+          }
+        ],
+        "env": [
+          {
+            "name": "WATCH_NAMESPACE",
+            "valueFrom": {
+              "fieldRef": {
+                "apiVersion": "v1",
+                "fieldPath": "metadata.namespace"
+              }
+            }
+          },
+          {
+            "name": "POD_NAME",
+            "valueFrom": {
+              "fieldRef": {
+                "apiVersion": "v1",
+                "fieldPath": "metadata.name"
+              }
+            }
+          },
+          {
+            "name": "POD_NAMESPACE",
+            "valueFrom": {
+              "fieldRef": {
+                "apiVersion": "v1",
+                "fieldPath": "metadata.namespace"
+              }
+            }
+          },
+          {
+            "name": "OPERATOR_NAME",
+            "value": "jaeger-operator"
+          }
+        ],
+        "resources": {
+          
+        },
+        "volumeMounts": [
+          {
+            "name": "jaeger-operator-token-2mtb4",
+            "readOnly": true,
+            "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount"
+          }
+        ],
+        "terminationMessagePath": "/dev/termination-log",
+        "terminationMessagePolicy": "File",
+        "imagePullPolicy": "IfNotPresent"
+      }
+    ],
+    "restartPolicy": "Always",
+    "terminationGracePeriodSeconds": 30,
+    "dnsPolicy": "ClusterFirst",
+    "serviceAccountName": "jaeger-operator",
+    "serviceAccount": "jaeger-operator",
+    "nodeName": "vocs40nfvi01",
+    "securityContext": {
+      
+    },
+    "schedulerName": "default-scheduler",
+    "tolerations": [
+      {
+        "key": "node.kubernetes.io/not-ready",
+        "operator": "Exists",
+        "effect": "NoExecute",
+        "tolerationSeconds": 300
+      },
+      {
+        "key": "node.kubernetes.io/unreachable",
+        "operator": "Exists",
+        "effect": "NoExecute",
+        "tolerationSeconds": 300
+      }
+    ],
+    "priority": 0,
+    "enableServiceLinks": true
+  },
+  "status": {
+    "phase": "Running",
+    "conditions": [
+      {
+        "type": "Initialized",
+        "status": "True",
+        "lastProbeTime": null,
+        "lastTransitionTime": "2020-12-01T02:25:37Z"
+      },
+      {
+        "type": "Ready",
+        "status": "True",
+        "lastProbeTime": null,
+        "lastTransitionTime": "2020-12-01T02:25:49Z"
+      },
+      {
+        "type": "ContainersReady",
+        "status": "True",
+        "lastProbeTime": null,
+        "lastTransitionTime": "2020-12-01T02:25:49Z"
+      },
+      {
+        "type": "PodScheduled",
+        "status": "True",
+        "lastProbeTime": null,
+        "lastTransitionTime": "2020-12-01T02:25:37Z"
+      }
+    ],
+    "hostIP": "172.20.3.58",
+    "podIP": "10.244.1.151",
+    "podIPs": [
+      {
+        "ip": "10.244.1.151"
+      }
+    ],
+    "startTime": "2020-12-01T02:25:37Z",
+    "containerStatuses": [
+      {
+        "name": "jaeger-operator",
+        "state": {
+          "running": {
+            "startedAt": "2020-12-01T02:25:48Z"
+          }
+        },
+        "lastState": {
+          
+        },
+        "ready": true,
+        "restartCount": 0,
+        "image": "docker-registry:4000/jaegertracing/jaeger-operator:1.20.0",
+        "imageID": "docker-pullable://docker-registry:4000/jaegertracing/jaeger-operator@sha256:2d2c9a325a2e40400821e92de0abe826f86174208ae7d3357eba7fb692139c98",
+        "containerID": "docker://e37f7e808cd7802a56d0b3f7f6b939c5e37a749cd5f391dee08c92845bd6e63c",
+        "started": true
+      }
+    ],
+    "qosClass": "BestEffort"
+  }
+}

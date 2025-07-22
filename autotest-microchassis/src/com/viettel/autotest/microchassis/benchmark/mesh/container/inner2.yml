@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: microchassis-chp
+spec:
+  clusterIP: None
+  selector:
+    app: microchassis-chp
+  ports:
+    - port: 13002
+      targetPort: 13002
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microchassis-chp
+  labels:
+    app: microchassis-chp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: microchassis-chp
+  template:
+    metadata:
+      labels:
+        app: microchassis-chp
+    spec:
+      nodeName: vocs40nfvi06
+      containers:
+        - name: main
+          image: docker-registry:4000/tiennn18/microchassis-microservice:4.2
+          imagePullPolicy: Always
+          env:
+            - name: VNF_INSTANCE_NAME # deployment name
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: DNS_NAME # deployment name = service name
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          command: ["java"]
+          args: ["-Xmx3G", "-jar",
+            # client config
+                 "-DclientMode=async",
+            # mesh config
+                 "-DVDU_NAME=chp-gy",
+            # general
+                 "-DTCP_WARMUP_ENABLE=true",
+                 "-DTCP_WARMUP_COUNT=100000",
+                 "-DNUMBER_OF_CPU=2",
+                 "-DserviceType=inner2",
+                 "-Dname=chp",
+                 "-DintervalStatistic=1000", "-Dlog4j.configurationFile=/mesh/mesh-log4j2.xml",
+                 "/mesh/microchassis-mesh-jar-with-dependencies.jar" ]
+          resources:
+            requests:
+              memory: 4Gi
+              cpu: 2
+            limits:
+              memory: 4Gi
+              cpu: 2
+  strategy:
+    type: Recreate

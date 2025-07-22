@@ -1,0 +1,16 @@
+## Command
+
+# Deploy namespace
+kubectl apply -f deploy/namespace.yaml
+
+# Service account
+kubectl apply -f deploy/logging/fluent-bit/service-account.yaml
+
+# ConfigMap config for fluent-bit
+kubectl apply -f deploy/logging/fluent-bit/config-map.yaml
+
+# Fluent-bit
+kubectl apply -f deploy/logging/fluent-bit/fluent-bit.yaml
+
+# Deploy ConfigMap init Env for app
+kubectl apply -f deploy/logging/init-log/config-map-init-env.yaml

@@ -1,0 +1,249 @@
+2025-06-30 18:31:31.832 [172] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), vnf_instance_name=unknown
+2025-06-30 18:31:31.832 [172] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), vnf_instance_name=unknown
+2025-06-30 18:31:31.837 [175] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), instance=127.0.1.1
+2025-06-30 18:31:31.837 [175] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), instance=127.0.1.1
+2025-06-30 18:31:31.838 [181] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), nodeName=vht-virtual-machine
+2025-06-30 18:31:31.838 [181] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), nodeName=vht-virtual-machine
+2025-06-30 18:31:31.840 [15] c.v.v.m.m.MetricCollector [INFO] [main] using OpenTelemetry as importer
+2025-06-30 18:31:31.840 [15] c.v.v.m.m.MetricCollector [INFO] [main] using OpenTelemetry as importer
+2025-06-30 18:31:31.916 [121] c.v.v.m.m.MetricCollector [INFO] [main] ApplicationID(podType=unknown, podId=localhost) registered to metric collector. MapMetrics size 1 Keys 
+2025-06-30 18:31:31.916 [121] c.v.v.m.m.MetricCollector [INFO] [main] ApplicationID(podType=unknown, podId=localhost) registered to metric collector. MapMetrics size 1 Keys 
+2025-06-30 18:31:31.918 [158] c.v.v.m.m.MetricCollector [INFO] [main] Metric collector started. intervalMs=5000, cacheDurationMs=0, firstCollect=[2025/06/30_18:31:30.000]
+2025-06-30 18:31:31.918 [158] c.v.v.m.m.MetricCollector [INFO] [main] Metric collector started. intervalMs=5000, cacheDurationMs=0, firstCollect=[2025/06/30_18:31:30.000]
+2025-06-30 18:31:31.957 [1172] o.q.i.StdSchedulerFactory [INFO] [main] Using default implementation for ThreadExecutor
+2025-06-30 18:31:31.965 [61] o.q.c.SchedulerSignalerImpl [INFO] [main] Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2025-06-30 18:31:31.966 [240] o.q.c.QuartzScheduler [INFO] [main] Quartz Scheduler v.2.2.2 created.
+2025-06-30 18:31:31.966 [155] o.q.s.RAMJobStore [INFO] [main] RAMJobStore initialized.
+2025-06-30 18:31:31.967 [305] o.q.c.QuartzScheduler [INFO] [main] Scheduler meta-data: Quartz Scheduler (v2.2.2) 'METRIC_COLLECTOR' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 2 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2025-06-30 18:31:31.967 [1327] o.q.i.StdSchedulerFactory [INFO] [main] Quartz scheduler 'METRIC_COLLECTOR' initialized from an externally provided properties instance.
+2025-06-30 18:31:31.967 [1331] o.q.i.StdSchedulerFactory [INFO] [main] Quartz scheduler version: 2.2.2
+2025-06-30 18:31:31.969 [575] o.q.c.QuartzScheduler [INFO] [main] Scheduler METRIC_COLLECTOR_$_NON_CLUSTERED started.
+2025-06-30 18:31:32.016 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:31:31.982 avg_latency=14.0|custom series=11807.0|requests=23444.0|under4ms=11798.0
+2025-06-30 18:31:32.016 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:31:31.982 avg_latency=14.0|custom series=11807.0|requests=23444.0|under4ms=11798.0
+2025-06-30 18:31:35.003 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:31:35.000 avg_latency=14.0|custom series=5695219.0|requests=1.139054E7|under4ms=5695221.0
+2025-06-30 18:31:35.003 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:31:35.000 avg_latency=14.0|custom series=5695219.0|requests=1.139054E7|under4ms=5695221.0
+2025-06-30 18:31:40.002 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:31:40.001 avg_latency=14.0|custom series=1.050946E7|requests=2.101861E7|under4ms=1.0509499E7
+2025-06-30 18:31:40.002 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:31:40.001 avg_latency=14.0|custom series=1.050946E7|requests=2.101861E7|under4ms=1.0509499E7
+2025-06-30 18:31:41.943 [87] c.v.v.m.m.MetricTest [INFO] [main] metric.getLastValue('observe') = 5.0
+2025-06-30 18:31:41.943 [87] c.v.v.m.m.MetricTest [INFO] [main] metric.getLastValue('observe') = 5.0
+2025-06-30 18:32:07.246 [172] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), vnf_instance_name=unknown
+2025-06-30 18:32:07.246 [172] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), vnf_instance_name=unknown
+2025-06-30 18:32:07.249 [175] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), instance=127.0.1.1
+2025-06-30 18:32:07.249 [175] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), instance=127.0.1.1
+2025-06-30 18:32:07.249 [181] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), nodeName=vht-virtual-machine
+2025-06-30 18:32:07.249 [181] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), nodeName=vht-virtual-machine
+2025-06-30 18:32:07.252 [15] c.v.v.m.m.MetricCollector [INFO] [main] using OpenTelemetry as importer
+2025-06-30 18:32:07.252 [15] c.v.v.m.m.MetricCollector [INFO] [main] using OpenTelemetry as importer
+2025-06-30 18:32:07.346 [121] c.v.v.m.m.MetricCollector [INFO] [main] ApplicationID(podType=unknown, podId=localhost) registered to metric collector. MapMetrics size 1 Keys 
+2025-06-30 18:32:07.346 [121] c.v.v.m.m.MetricCollector [INFO] [main] ApplicationID(podType=unknown, podId=localhost) registered to metric collector. MapMetrics size 1 Keys 
+2025-06-30 18:32:07.347 [158] c.v.v.m.m.MetricCollector [INFO] [main] Metric collector started. intervalMs=5000, cacheDurationMs=0, firstCollect=[2025/06/30_18:32:05.000]
+2025-06-30 18:32:07.347 [158] c.v.v.m.m.MetricCollector [INFO] [main] Metric collector started. intervalMs=5000, cacheDurationMs=0, firstCollect=[2025/06/30_18:32:05.000]
+2025-06-30 18:32:07.376 [1172] o.q.i.StdSchedulerFactory [INFO] [main] Using default implementation for ThreadExecutor
+2025-06-30 18:32:07.388 [61] o.q.c.SchedulerSignalerImpl [INFO] [main] Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2025-06-30 18:32:07.388 [240] o.q.c.QuartzScheduler [INFO] [main] Quartz Scheduler v.2.2.2 created.
+2025-06-30 18:32:07.389 [155] o.q.s.RAMJobStore [INFO] [main] RAMJobStore initialized.
+2025-06-30 18:32:07.390 [305] o.q.c.QuartzScheduler [INFO] [main] Scheduler meta-data: Quartz Scheduler (v2.2.2) 'METRIC_COLLECTOR' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 2 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2025-06-30 18:32:07.390 [1327] o.q.i.StdSchedulerFactory [INFO] [main] Quartz scheduler 'METRIC_COLLECTOR' initialized from an externally provided properties instance.
+2025-06-30 18:32:07.390 [1331] o.q.i.StdSchedulerFactory [INFO] [main] Quartz scheduler version: 2.2.2
+2025-06-30 18:32:07.395 [575] o.q.c.QuartzScheduler [INFO] [main] Scheduler METRIC_COLLECTOR_$_NON_CLUSTERED started.
+2025-06-30 18:32:07.463 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:32:07.398 avg_latency=14.0|custom series=1448.0|requests=2884.0|under4ms=1444.0
+2025-06-30 18:32:07.463 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:32:07.398 avg_latency=14.0|custom series=1448.0|requests=2884.0|under4ms=1444.0
+2025-06-30 18:32:10.026 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:32:10.000 avg_latency=14.0|custom series=3736796.0|requests=7453626.0|under4ms=3730178.0
+2025-06-30 18:32:10.026 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:32:10.000 avg_latency=14.0|custom series=3736796.0|requests=7453626.0|under4ms=3730178.0
+2025-06-30 18:32:15.002 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:32:15.000 avg_latency=14.0|custom series=7596738.0|requests=1.521281E7|under4ms=7603446.0
+2025-06-30 18:32:15.002 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:32:15.000 avg_latency=14.0|custom series=7596738.0|requests=1.521281E7|under4ms=7603446.0
+2025-06-30 18:32:49.465 [172] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), vnf_instance_name=unknown
+2025-06-30 18:32:49.465 [172] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), vnf_instance_name=unknown
+2025-06-30 18:32:49.468 [175] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), instance=127.0.1.1
+2025-06-30 18:32:49.468 [175] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), instance=127.0.1.1
+2025-06-30 18:32:49.469 [181] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), nodeName=vht-virtual-machine
+2025-06-30 18:32:49.469 [181] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), nodeName=vht-virtual-machine
+2025-06-30 18:32:49.471 [15] c.v.v.m.m.MetricCollector [INFO] [main] using OpenTelemetry as importer
+2025-06-30 18:32:49.471 [15] c.v.v.m.m.MetricCollector [INFO] [main] using OpenTelemetry as importer
+2025-06-30 18:32:49.555 [121] c.v.v.m.m.MetricCollector [INFO] [main] ApplicationID(podType=unknown, podId=localhost) registered to metric collector. MapMetrics size 1 Keys 
+2025-06-30 18:32:49.555 [121] c.v.v.m.m.MetricCollector [INFO] [main] ApplicationID(podType=unknown, podId=localhost) registered to metric collector. MapMetrics size 1 Keys 
+2025-06-30 18:32:49.556 [158] c.v.v.m.m.MetricCollector [INFO] [main] Metric collector started. intervalMs=5000, cacheDurationMs=0, firstCollect=[2025/06/30_18:32:45.000]
+2025-06-30 18:32:49.556 [158] c.v.v.m.m.MetricCollector [INFO] [main] Metric collector started. intervalMs=5000, cacheDurationMs=0, firstCollect=[2025/06/30_18:32:45.000]
+2025-06-30 18:32:49.587 [1172] o.q.i.StdSchedulerFactory [INFO] [main] Using default implementation for ThreadExecutor
+2025-06-30 18:32:49.598 [61] o.q.c.SchedulerSignalerImpl [INFO] [main] Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2025-06-30 18:32:49.599 [240] o.q.c.QuartzScheduler [INFO] [main] Quartz Scheduler v.2.2.2 created.
+2025-06-30 18:32:49.599 [155] o.q.s.RAMJobStore [INFO] [main] RAMJobStore initialized.
+2025-06-30 18:32:49.600 [305] o.q.c.QuartzScheduler [INFO] [main] Scheduler meta-data: Quartz Scheduler (v2.2.2) 'METRIC_COLLECTOR' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 2 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2025-06-30 18:32:49.600 [1327] o.q.i.StdSchedulerFactory [INFO] [main] Quartz scheduler 'METRIC_COLLECTOR' initialized from an externally provided properties instance.
+2025-06-30 18:32:49.600 [1331] o.q.i.StdSchedulerFactory [INFO] [main] Quartz scheduler version: 2.2.2
+2025-06-30 18:32:49.604 [575] o.q.c.QuartzScheduler [INFO] [main] Scheduler METRIC_COLLECTOR_$_NON_CLUSTERED started.
+2025-06-30 18:32:49.702 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:32:49.609 avg_latency=14.0|custom series=9484.0|requests=18500.0|under4ms=9465.0
+2025-06-30 18:32:49.702 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:32:49.609 avg_latency=14.0|custom series=9484.0|requests=18500.0|under4ms=9465.0
+2025-06-30 18:33:29.707 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:33:08.645 avg_latency=14.0|custom series=13576.0|requests=24292.0|under4ms=12746.0
+2025-06-30 18:33:29.707 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:33:08.645 avg_latency=14.0|custom series=13576.0|requests=24292.0|under4ms=12746.0
+2025-06-30 18:34:10.867 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:34:10.861 avg_latency=14.0|custom series=96436.0|requests=196190.0|under4ms=97282.0
+2025-06-30 18:34:10.867 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:34:10.861 avg_latency=14.0|custom series=96436.0|requests=196190.0|under4ms=97282.0
+2025-06-30 18:34:22.964 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:34:22.957 avg_latency=14.0|custom series=8502.0|requests=16852.0|under4ms=8500.0
+2025-06-30 18:34:22.964 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:34:22.963 avg_latency=14.0|custom series=4481.0|requests=9110.0|under4ms=4491.0
+2025-06-30 18:34:22.964 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:34:22.963 avg_latency=14.0|custom series=4481.0|requests=9110.0|under4ms=4491.0
+2025-06-30 18:34:22.964 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:34:22.957 avg_latency=14.0|custom series=8502.0|requests=16852.0|under4ms=8500.0
+2025-06-30 18:34:26.526 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:34:25.590 avg_latency=14.0|custom series=1433.0|requests=2726.0|under4ms=1441.0
+2025-06-30 18:34:26.526 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:34:25.590 avg_latency=14.0|custom series=1433.0|requests=2726.0|under4ms=1441.0
+2025-06-30 18:34:30.001 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:34:30.000 avg_latency=14.0|custom series=5862283.0|requests=1.1724394E7|under4ms=5862291.0
+2025-06-30 18:34:30.001 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:34:30.000 avg_latency=14.0|custom series=5862283.0|requests=1.1724394E7|under4ms=5862291.0
+2025-06-30 18:34:35.002 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:34:35.000 avg_latency=14.0|custom series=8372862.0|requests=1.674585E7|under4ms=8372848.0
+2025-06-30 18:34:35.002 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:34:35.000 avg_latency=14.0|custom series=8372862.0|requests=1.674585E7|under4ms=8372848.0
+2025-06-30 18:35:30.550 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:35:30.549 avg_latency=14.0|custom series=12278.0|requests=24652.0|under4ms=12290.0
+2025-06-30 18:35:30.550 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:35:30.549 avg_latency=14.0|custom series=12278.0|requests=24652.0|under4ms=12290.0
+2025-06-30 18:35:35.030 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:35:35.029 avg_latency=14.0|custom series=4146984.0|requests=8293908.0|under4ms=4146993.0
+2025-06-30 18:35:35.030 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:35:35.029 avg_latency=14.0|custom series=4146984.0|requests=8293908.0|under4ms=4146993.0
+2025-06-30 18:35:53.536 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:35:53.535 avg_latency=14.0|custom series=9338.0|requests=18790.0|under4ms=9320.0
+2025-06-30 18:35:53.536 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:35:53.535 avg_latency=14.0|custom series=9338.0|requests=18790.0|under4ms=9320.0
+2025-06-30 18:35:57.650 [172] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), vnf_instance_name=unknown
+2025-06-30 18:35:57.650 [172] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), vnf_instance_name=unknown
+2025-06-30 18:35:57.652 [175] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), instance=127.0.1.1
+2025-06-30 18:35:57.652 [175] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), instance=127.0.1.1
+2025-06-30 18:35:57.652 [181] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), nodeName=vht-virtual-machine
+2025-06-30 18:35:57.652 [181] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), nodeName=vht-virtual-machine
+2025-06-30 18:35:57.655 [15] c.v.v.m.m.MetricCollector [INFO] [main] using OpenTelemetry as importer
+2025-06-30 18:35:57.655 [15] c.v.v.m.m.MetricCollector [INFO] [main] using OpenTelemetry as importer
+2025-06-30 18:35:57.728 [121] c.v.v.m.m.MetricCollector [INFO] [main] ApplicationID(podType=unknown, podId=localhost) registered to metric collector. MapMetrics size 1 Keys 
+2025-06-30 18:35:57.728 [121] c.v.v.m.m.MetricCollector [INFO] [main] ApplicationID(podType=unknown, podId=localhost) registered to metric collector. MapMetrics size 1 Keys 
+2025-06-30 18:35:57.730 [158] c.v.v.m.m.MetricCollector [INFO] [main] Metric collector started. intervalMs=5000, cacheDurationMs=0, firstCollect=[2025/06/30_18:35:55.000]
+2025-06-30 18:35:57.730 [158] c.v.v.m.m.MetricCollector [INFO] [main] Metric collector started. intervalMs=5000, cacheDurationMs=0, firstCollect=[2025/06/30_18:35:55.000]
+2025-06-30 18:35:57.756 [1172] o.q.i.StdSchedulerFactory [INFO] [main] Using default implementation for ThreadExecutor
+2025-06-30 18:35:57.769 [61] o.q.c.SchedulerSignalerImpl [INFO] [main] Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2025-06-30 18:35:57.769 [240] o.q.c.QuartzScheduler [INFO] [main] Quartz Scheduler v.2.2.2 created.
+2025-06-30 18:35:57.770 [155] o.q.s.RAMJobStore [INFO] [main] RAMJobStore initialized.
+2025-06-30 18:35:57.770 [305] o.q.c.QuartzScheduler [INFO] [main] Scheduler meta-data: Quartz Scheduler (v2.2.2) 'METRIC_COLLECTOR' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 2 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2025-06-30 18:35:57.771 [1327] o.q.i.StdSchedulerFactory [INFO] [main] Quartz scheduler 'METRIC_COLLECTOR' initialized from an externally provided properties instance.
+2025-06-30 18:35:57.771 [1331] o.q.i.StdSchedulerFactory [INFO] [main] Quartz scheduler version: 2.2.2
+2025-06-30 18:35:57.774 [575] o.q.c.QuartzScheduler [INFO] [main] Scheduler METRIC_COLLECTOR_$_NON_CLUSTERED started.
+2025-06-30 18:36:00.220 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:36:00.188 avg_latency=14.0|custom series=9017.0|requests=17654.0|under4ms=9013.0
+2025-06-30 18:36:00.220 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:36:00.188 avg_latency=14.0|custom series=9017.0|requests=17654.0|under4ms=9013.0
+2025-06-30 18:36:05.006 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:36:05.001 avg_latency=14.0|custom series=5952297.0|requests=1.189557E7|under4ms=5952357.0
+2025-06-30 18:36:05.006 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:36:05.001 avg_latency=14.0|custom series=5952297.0|requests=1.189557E7|under4ms=5952357.0
+2025-06-30 18:37:28.644 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:37:28.643 avg_latency=14.0|custom series=7226.0|requests=23818.0|under4ms=7178.0
+2025-06-30 18:37:28.644 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:37:28.643 avg_latency=14.0|custom series=7226.0|requests=23818.0|under4ms=7178.0
+2025-06-30 18:39:11.434 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:39:11.433 avg_latency=14.0|custom series=21817.0|requests=43550.0|under4ms=21823.0
+2025-06-30 18:39:11.434 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:39:11.433 avg_latency=14.0|custom series=21817.0|requests=43550.0|under4ms=21823.0
+2025-06-30 18:39:15.001 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:39:15.000 avg_latency=14.0|custom series=2589192.0|requests=5178448.0|under4ms=2589185.0
+2025-06-30 18:39:15.001 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:39:15.000 avg_latency=14.0|custom series=2589192.0|requests=5178448.0|under4ms=2589185.0
+2025-06-30 18:39:20.001 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:39:20.000 avg_latency=14.0|custom series=6021031.0|requests=1.2041984E7|under4ms=6021046.0
+2025-06-30 18:39:20.001 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:39:20.000 avg_latency=14.0|custom series=6021031.0|requests=1.2041984E7|under4ms=6021046.0
+2025-06-30 18:40:10.732 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:39:26.728 avg_latency=14.0|custom series=13517.0|requests=27068.0|under4ms=13509.0
+2025-06-30 18:40:10.732 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:39:26.728 avg_latency=14.0|custom series=13517.0|requests=27068.0|under4ms=13509.0
+2025-06-30 18:40:24.152 [172] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), vnf_instance_name=unknown
+2025-06-30 18:40:24.152 [172] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), vnf_instance_name=unknown
+2025-06-30 18:40:24.157 [175] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), instance=127.0.1.1
+2025-06-30 18:40:24.157 [175] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), instance=127.0.1.1
+2025-06-30 18:40:24.158 [181] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), nodeName=vht-virtual-machine
+2025-06-30 18:40:24.158 [181] c.v.v.m.m.Metric [INFO] [main] Added shared label. appId=ApplicationID(podType=unknown, podId=localhost), nodeName=vht-virtual-machine
+2025-06-30 18:40:24.165 [15] c.v.v.m.m.MetricCollector [INFO] [main] using OpenTelemetry as importer
+2025-06-30 18:40:24.165 [15] c.v.v.m.m.MetricCollector [INFO] [main] using OpenTelemetry as importer
+2025-06-30 18:40:24.273 [121] c.v.v.m.m.MetricCollector [INFO] [main] ApplicationID(podType=unknown, podId=localhost) registered to metric collector. MapMetrics size 1 Keys 
+2025-06-30 18:40:24.273 [121] c.v.v.m.m.MetricCollector [INFO] [main] ApplicationID(podType=unknown, podId=localhost) registered to metric collector. MapMetrics size 1 Keys 
+2025-06-30 18:40:24.274 [158] c.v.v.m.m.MetricCollector [INFO] [main] Metric collector started. intervalMs=5000, cacheDurationMs=0, firstCollect=[2025/06/30_18:40:20.000]
+2025-06-30 18:40:24.274 [158] c.v.v.m.m.MetricCollector [INFO] [main] Metric collector started. intervalMs=5000, cacheDurationMs=0, firstCollect=[2025/06/30_18:40:20.000]
+2025-06-30 18:40:24.301 [1172] o.q.i.StdSchedulerFactory [INFO] [main] Using default implementation for ThreadExecutor
+2025-06-30 18:40:24.311 [61] o.q.c.SchedulerSignalerImpl [INFO] [main] Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2025-06-30 18:40:24.311 [240] o.q.c.QuartzScheduler [INFO] [main] Quartz Scheduler v.2.2.2 created.
+2025-06-30 18:40:24.312 [155] o.q.s.RAMJobStore [INFO] [main] RAMJobStore initialized.
+2025-06-30 18:40:24.312 [305] o.q.c.QuartzScheduler [INFO] [main] Scheduler meta-data: Quartz Scheduler (v2.2.2) 'METRIC_COLLECTOR' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 2 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2025-06-30 18:40:24.313 [1327] o.q.i.StdSchedulerFactory [INFO] [main] Quartz scheduler 'METRIC_COLLECTOR' initialized from an externally provided properties instance.
+2025-06-30 18:40:24.313 [1331] o.q.i.StdSchedulerFactory [INFO] [main] Quartz scheduler version: 2.2.2
+2025-06-30 18:40:24.316 [575] o.q.c.QuartzScheduler [INFO] [main] Scheduler METRIC_COLLECTOR_$_NON_CLUSTERED started.
+2025-06-30 18:40:24.399 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:40:24.321 avg_latency=14.0|custom series=1792.0|requests=3468.0|under4ms=1787.0
+2025-06-30 18:40:24.399 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:40:24.321 avg_latency=14.0|custom series=1792.0|requests=3468.0|under4ms=1787.0
+2025-06-30 18:40:26.629 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:40:26.614 avg_latency=14.0|custom series=4368.0|requests=8628.0|under4ms=4263.0
+2025-06-30 18:40:26.629 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:40:26.614 avg_latency=14.0|custom series=4368.0|requests=8628.0|under4ms=4263.0
+2025-06-30 18:40:30.238 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:40:30.236 avg_latency=14.0|custom series=80635.0|requests=161462.0|under4ms=80739.0
+2025-06-30 18:40:30.238 [589] c.v.v.m.m.Metric [INFO] [metric-cache-2] 
+Information_All 2025/06/30_18:40:30.236 avg_latency=14.0|custom series=80635.0|requests=161462.0|under4ms=80739.0
+2025-06-30 18:41:24.426 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:41:24.425 avg_latency=14.0|custom series=8980.0|requests=17934.0|under4ms=8982.0
+2025-06-30 18:41:24.426 [589] c.v.v.m.m.Metric [INFO] [metric-cache-1] 
+Information_All 2025/06/30_18:41:24.425 avg_latency=14.0|custom series=8980.0|requests=17934.0|under4ms=8982.0

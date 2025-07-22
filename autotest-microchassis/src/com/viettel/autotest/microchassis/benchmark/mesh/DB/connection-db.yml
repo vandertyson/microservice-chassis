@@ -1,0 +1,18 @@
+!!com.viettel.vocs.microchassis.connection.config.ConnectionConfiguration
+serviceType: abm
+podId: abm-uowyf9-adf79a
+cnfName: data4g
+dnsName: localhost
+#lbrs:
+#  - id: centerLbr
+#    host: localhost
+#    port: 9001
+#    type: center
+servers:
+  - id: s_db
+    port: 13007
+    maxConnection: 2
+    connectionLimitMode: fullmesh
+    lbrId: standaloneLbr
+    rateLimiter:
+      maxTps: 100000

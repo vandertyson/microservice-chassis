@@ -1,0 +1,8 @@
+servers:
+  - id: tcpServer
+    host: 172.16.34.125
+    port: 9099
+  - !!com.viettel.vocs.microchassis.http.config.HttpServerOptions
+    id: httpServer
+    host: 172.16.34.125
+    port: 9098

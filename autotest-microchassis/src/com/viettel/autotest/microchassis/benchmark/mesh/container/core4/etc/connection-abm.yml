@@ -1,0 +1,19 @@
+!!com.viettel.vocs.microchassis.connection.config.ConnectionConfiguration
+lbrs:
+  - id: centerLbr
+    host: microchassis-lbr
+    port: 9001
+    type: center
+clients:
+  - id: c_abm
+    host: microchassis-db
+    port: 13007
+    routeStrategy: rr
+    connectionLimitMode: fullmesh
+    lbrId: centerLbr
+    connectionPerIP: 3
+servers:
+  - id: s_abm
+    port: 13007
+    connectionLimitMode: fullmesh
+    lbrId: centerLbr

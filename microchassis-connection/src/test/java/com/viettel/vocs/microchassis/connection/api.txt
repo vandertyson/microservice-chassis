@@ -1,0 +1,87 @@
+1. Get token
+curl --location --request POST '172.20.3.81:8886/users/auth' \
+--header 'Authorization: Basic bWFubzoxMjM0NTZhQEE=' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "grant_type":"client_credentials"
+}'
+Note: Basic su dung encode base 64 string "username:password"
+
+2. VNFC send alarms
+curl --location --request POST '172.20.3.81:8886/extended-fm/v1/receives' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <get tu API 1>' \
+--data-raw '{
+	"type":"AlarmNotification",
+	"notificationType":"ALARM_NOTIFICATION",
+	"alarmType":"VNF_OBJECT",
+	"alarm": {
+        "id":"431bfc4d-56de-49f6-8a8d-783e4d0bbd8y",
+        "managedObjectId":"f75fd06f-899c-43db-80f8-7f802642ec71",
+        "managedObjectName": "tuyen_1212",
+        "vnfcIds":["69a48139-0a45-45a8-ac6b-2c60cd993217"],
+        "vnfcNames":["nfvo-162e45f57c2c"],
+        "rootCauseFaultyResource":
+            {
+            "faultyResourceType":"NETWORK",
+            "faultyResource":{"vimId":""}
+            },
+        "rootCauseFaultyComponent": {
+        "subObjectInstanceIp": "192.168.0.138"
+        },
+        "ackState":"UNACKNOWLEDGED",
+        "perceivedSeverity":"MAJOR",
+        "eventType":"PROCESSING_ERROR_ALARM",
+        "metadata":
+        {
+        "errorCode":"AbCd12356-._",
+        "vim_object_name":"",
+        "keyResolve":"",
+        "fault_details_replacement_mode":"",
+        "managedObjectType": "VNF_OBJECT",
+        "managedObjectTargetType": "SERVICE"
+        },
+        "eventTime": "2023-03-21T14:39:45.678+07:00",
+        "alarmChangedTime": "2023-07-06T14:39:45.678+07:00",
+        "probableCause":"Hello",
+        "faultDetails":["Hello"]
+    }
+}'
+
+3. VNFC send start notification
+curl --location --request POST '172.20.3.81:8886/cnflcm/v1/cnfc_status' \
+--header 'Authorization: Bearer <get tu API 1>' \
+--header 'Cache-Control: no-cache' \
+--header 'Content-Type: application/json' \
+--header 'Postman-Token: 9417ae75-8c38-4e58-9324-3a83173b0b1e' \
+--data-raw '{
+    "VNF_INSTANCE_ID": "6c3fc02e-dc72-4ce1-bfc2-7d10cc87c518",
+    "VNFC_ID": "14372740-5692-414b-8366-a967f774ecff"
+}'
+
+4. VNFC push metric
+curl --location --request POST '172.20.3.81:8886/extended-pm/v1/metric/import' \
+--header 'Authorization: Bearer <get tu API 1>' \
+--header 'Content-Type: application/json' \
+--data-raw '[
+  {
+    "metricName": "test_for_mr_sao",
+    "exporterVersion": "v1",
+    "exporterType": "CNF_SERVICE_EXPORTER",
+    "objectInstanceId": "96217c3a-5929-4af2-bf97-c55baa4fee36",
+    "subObjectInstanceId": "b54ccf32-7124-4dc4-b9f2-7b6235190087",
+    "managedObjectType": "CNF_OBJECT",
+    "metadata" : {
+      "name": "groot",
+      "instance": "192.168.71.14",
+      "counterId": 1,
+      "errorCode":"test"
+    },
+    "values": [
+      15
+    ],
+    "timestamps": [
+      1713488206000
+    ]
+  }
+]'

@@ -1,0 +1,23 @@
+clients: # to itself, for benchmark
+- !!com.viettel.vocs.microchassis.http.config.HttpClientOptions
+  id: h2client
+  port: 9000
+  to3rdParty: true
+  host: 192.168.1.1
+- !!com.viettel.vocs.microchassis.http.config.HttpClientOptions
+  id: h1client
+  port: 9000
+  host: localhost
+  to3rdParty: true
+- id: tcpClient
+  port: 9001
+  host: localhost
+- id: abmClient
+  port: 8131
+  host: abm
+servers:
+- !!com.viettel.vocs.microchassis.http.config.HttpServerOptions
+  id: hServer
+  port: 9000
+- id: tcpServer
+  port: 9001

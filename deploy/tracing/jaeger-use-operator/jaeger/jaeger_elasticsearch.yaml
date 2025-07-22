@@ -1,0 +1,113 @@
+apiVersion: jaegertracing.io/v1
+kind: Jaeger
+metadata:
+  name: jaeger-production
+  namespace: microservices-chassis
+spec:
+  ingress:
+    enabled: false
+  strategy: production
+  agent:
+    # strategy: DaemonSet
+    image: docker-registry:4000/jaegertracing/jaeger-agent:1.20.0
+    imagePullPolicy: IfNotPresent
+    # options:
+    #   log-level: info
+    # resources:
+    #   requests:
+    #     cpu: 1000m
+    #     memory: 50Mi
+    #   limits:
+    #     cpu: 10000m
+    #     memory: 5Gi
+  collector:
+    image: docker-registry:4000/jaegertracing/jaeger-collector:1.20.0
+    imagePullPolicy: IfNotPresent
+    maxReplicas: 100
+    autoscale: true
+    replicas: 1
+    options:      
+      log-level: info
+      es:
+        num-shards: 3
+        num-replicas: 1
+        # -------------------------
+        # bulk.actions: 1000          #default
+        bulk.flush-interval: 200ms  #default
+        bulk.size: 5000000          #bytes
+        bulk.workers: 10
+        # create-index-templates: false
+        # use-aliases: true
+      collector:
+        num-workers: 100
+        queue-size: 5000
+        # queue-size-memory: 100 #MiB
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 50Mi
+      limits:
+        cpu: 1000m
+        memory: 900Mi
+  # sampling:
+  #   options:
+  #     log-level: info
+  query:
+    image: docker-registry:4000/jaegertracing/jaeger-query:1.20.0
+    imagePullPolicy: IfNotPresent
+    replicas: 1
+    options:      
+      log-level: info
+      # es:
+      #   use-aliases: true
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 500Mi
+      limits:
+        cpu: 10000m
+        memory: 5Gi
+  # ingester:
+  #   options: 
+  #     log-level: info
+  options: {}
+  storage:
+    type: elasticsearch
+    options:
+      es:
+        create-index-templates: true
+        # use-aliases: true
+        server-urls: http://172.20.3.72:9200
+        # index-prefix: tracing
+        # tls: create-index-templates
+        #   ca: /es/certificates/ca.crt
+    # secretName: jaeger-secret
+    esRollover:
+      enabled: false
+    #   conditions: "{\"max_age\": \"2d\"}"            # conditions when to rollover to a new index
+    #   conditions: "{\"max_size\": \"500mb\"}"
+    #   readTTL: 1h                                    # how long should be old data available for reading (7 days)
+    #   schedule: "*/40 * * * *"                       # cron expression for it to run
+    esIndexCleaner:
+      enabled: false                                 # turn the cron job deployment on and off
+      # image: docker-registry:4000/jaegertracing/jaeger-es-index-cleaner:1.20.0
+      # numberOfDays: 2                                # number of days to wait before deleting a record
+      # schedule: "*/1 * * * *"                        # every one minute.
+    dependencies:
+      enabled: false                                 # turn the job deployment on and off
+      # image: docker-registry:4000/jaegertracing/spark-dependencies:latest
+      # schedule: "55 23 * * *"                        #  cron expression for it to run
+      # sparkMaster: ""                                #  spark master connection string, when empty spark runs in embedded local mode
+      # resources:
+      #   requests:
+      #     memory: 4096Mi
+      #   limits:
+      #     memory: 4096Mi
+  # volumeMounts: 
+  #   - name: certificates
+  #     mountPath: /es/certificates/
+  #     readOnly: true
+  # volumes:
+  #   - name: certificates
+  #     secret:
+  #       secretName: elasticsearch-es-http-certs-public

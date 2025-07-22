@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+        <Property name="appenderPatternLayout">%d{dd/MM/yyyy HH:mm:ss} %level %t %logger %msg%n</Property>
+
+        <Property name="rootLog">$${env:ROOT_LOG:-/u01/data/log-storage}</Property>
+        <Property name="podName">$${env:POD_NAME:-microservices-chassis}</Property>
+        <Property name="namespaceName">$${env:NAMESPACE:-namespaceName}</Property>
+        <Property name="containerName">$${env:CONTAINER_NAME:-microservices-chassis}</Property>
+        <Property name="containerId">$${env:CONTAINER_ID:-containerId}</Property>
+        <Property name="prefixFileName">${podName}_${namespaceName}_${containerName}_${containerId}</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${appenderPatternLayout}" />
+        </Console>
+
+        <Console name="ConsoleColor" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%highlight{%d [%t] %-5level: %msg%n%throwable}{FATAL=white, ERROR=red, WARN=blue, INFO=white, DEBUG=green, TRACE=blue}"/>
+        </Console>
+
+        <File name="appLogFile" fileName="${rootLog}/${prefixFileName}_server.log" append="false">
+            <PatternLayout pattern="${appenderPatternLayout}" />
+        </File>
+
+        <Async name="consoleLogAsync">
+            <AppenderRef ref="Console"/>
+        </Async>
+
+        <Async name="fileLogAsync">
+            <AppenderRef ref="appLogFile"/>
+        </Async>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="fileLogAsync"/>
+            <AppenderRef ref="consoleLogAsync"/>
+        </Root>
+
+        <Logger name="com.viettel.vocs.microchassis.logging" level="debug" additivity="false">
+            <AppenderRef ref="fileLogAsync"/>
+            <AppenderRef ref="consoleLogAsync"/>
+        </Logger>
+
+        <Logger name="com.viettel.vocs.microchassis.exception" level="debug" additivity="false">
+            <AppenderRef ref="consoleLogAsync"/>
+        </Logger>
+
+        <Logger name="com.viettel.vocs.microchassis.http" level="info" additivity="false">
+            <AppenderRef ref="consoleLogAsync"/>
+        </Logger>
+
+<!--        <Logger name="org.apache.kafka" level="info" additivity="false">-->
+<!--            <AppenderRef ref="consoleLogAsync"/>-->
+<!--        </Logger>-->
+    </Loggers>
+</Configuration>

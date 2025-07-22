@@ -1,0 +1,14 @@
+clients:
+  - id: tcpClient
+    port: 9099
+    host: downstream
+    routeStrategy:
+      !!com.viettel.vocs.microchassis.connection.loadbalancing.configure.BTC
+      initTPS: 500
+  - !!com.viettel.vocs.microchassis.http.config.HttpClientOptions
+    id: httpClient
+    port: 9098
+    host: downstream
+    routeStrategy:
+      !!com.viettel.vocs.microchassis.connection.loadbalancing.configure.BTC
+      initTPS: 500

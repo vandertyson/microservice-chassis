@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="FakeService Front" type="Application" factoryName="Application" singleton="false">
+    <option name="ALTERNATIVE_JRE_PATH" value="11" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <option name="MAIN_CLASS_NAME" value="com.viettel.autotest.microchassis.benchmark.Microservice" />
+    <module name="autotest-microchassis" />
+    <option name="VM_PARAMETERS" value="-DclientMode=sync -DfakeTPS=5000 -DcPort=13000 -DcHost=localhost -Dstrategy=RR -DmaxAllowTPS=400000 -DmaxTPS=30000 -DmaxConnectionConcurrent=0 -DmaxRequest=0 -DserviceType=gateway -DintervalStatistic=1000 -Dlog4j.configurationFile=$PROJECT_DIR$/microchassis-demo/src/com/viettel/vocs/microchassis/tiennn18/mesh-log4j2.xml" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

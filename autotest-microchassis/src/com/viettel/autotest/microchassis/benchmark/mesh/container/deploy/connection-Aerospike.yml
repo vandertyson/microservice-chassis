@@ -1,0 +1,11 @@
+!!com.viettel.vocs.microchassis.connection.config.ConnectionConfiguration
+#lbrs:
+#  - id: centerLbr
+#    host: microchassis-lbr
+#    port: 9001
+#    type: center
+servers:
+  - id: s_Aerospike
+    port: 13007
+    connectionLimitMode: fullmesh
+    lbrId: standaloneLbr

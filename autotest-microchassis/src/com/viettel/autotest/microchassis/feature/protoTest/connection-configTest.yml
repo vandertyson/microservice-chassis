@@ -1,0 +1,32 @@
+!!com.viettel.vocs.microchassis.connection.config.ConnectionConfiguration
+#lbrs:
+#  - id: centerLbr
+#    host: microchassis-lbr
+#    port: 9001
+#    type: center
+clients:
+  - id: c_chp
+    host: microchassis-abm
+    port: 13007
+    connectionLimitMode: fullmesh
+    lbrId: standaloneLbr
+    routeStrategy:
+      #      !!com.viettel.vocs.microchassis.connection.loadbalancing.configure.RR
+      #      logId: rr
+      !!com.viettel.vocs.microchassis.connection.loadbalancing.configure.LCC
+      logId: lcc
+    #      !!com.viettel.vocs.microchassis.connection.loadbalancing.configure.BCC
+    #      highload: 90
+    #      !!com.viettel.vocs.microchassis.connection.loadbalancing.configure.BTC
+    #      highload: 85
+    #      initTPS: 500
+    #      controlWaitOnHighLoadOnly: true
+    #      enableControlAtLoadPct: 60
+    #    connectionPerIP: 2
+    # isolationConfig:
+    #   enable: true
+servers:
+  - id: s_chp
+    port: 13007
+    connectionLimitMode: fullmesh
+    lbrId: standaloneLbr

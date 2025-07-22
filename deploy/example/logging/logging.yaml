@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logging-ex
+  labels:
+    app: logging-ex
+    version: v1
+  namespace: microservices-chassis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logging-ex
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: logging-ex
+        version: v1
+    spec:
+      nodeName: "vocs40nfvi02"
+      serviceAccountName: microchassis
+      containers:
+      - name: logging-ex
+        image: docker-registry:4000/microchassis:v1
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; echo hello; do sleep 48h; done;" ]
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "source /app/bin/init-env-for-logging.sh &&
+                java -Dlog4j.configurationFile=./src/main/resources/etc/log4j/log4j2.xml -DintervalTime=2000
+                -cp microchassis-logging/target/microchassis-logging.jar:microchassis-logging/target/dependencies/*
+                com.viettel.vocs.microchassis.logging.example.LoggingExample"]
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        - containerPort: 8443
+        env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "256Mi"
+          limits:
+            cpu: "2000m"
+            memory: "4096Mi"
+        volumeMounts:
+          - name: log-storage
+            mountPath: /u01/data/log-storage
+          - name: init-env-for-logging
+            mountPath: "/app/bin/init-env-for-logging.sh"
+            subPath: "init-env-for-logging.sh"
+            readOnly: true
+      volumes:
+        - name: log-storage
+          hostPath:
+            path: /u01/data/log-storage
+        - name: init-env-for-logging
+          configMap:
+            name: init-env-for-logging

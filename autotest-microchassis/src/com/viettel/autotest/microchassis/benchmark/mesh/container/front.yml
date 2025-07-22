@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microchassis-lb
+  labels:
+    app: microchassis-lb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microchassis-lb
+  template:
+    metadata:
+      labels:
+        app: microchassis-lb
+#        csde1: tiennn18-mesh_csde-microchassis-lb-app_app-app
+#      annotations:
+#        k8s.v1.cni.cncf.io/networks: '[{"name":"app-app-2","namespace":"default","interface":"app-app-2"} ,{"name":"app-app-1","namespace":"default","interface":"app-app-1"} ,{"name":"app-app","namespace":"default","interface":"app-app"}]'
+    spec:
+      nodeName: vocs40db01 # vocs40nfvi05 # vocs40db02 # vocs40db01
+      containers:
+        - name: main
+          image: docker-registry:4000/tiennn18/microchassis-microservice:4.2
+          imagePullPolicy: Always
+          env:
+            - name: VNF_INSTANCE_NAME # deployment name
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: DNS_NAME # deployment name = service name
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          command: ["java"]
+          args: ["-Xmx2700m", "-jar",
+          # server config
+                 "-DfakeTPS=50000", #                  "-DfakeTPS=22000",
+                 "-DpayloadSize=4096", # 4096
+                 "-DgenerateThreads=2",
+          # client config
+                 "-DclientMode=async",
+          # mesh config
+                 "-DVDU_NAME=lb",
+          # general
+                 "-DTCP_WARMUP_ENABLE=true",
+                 "-DTCP_WARMUP_COUNT=100000",
+                 "-DNUMBER_OF_CPU=8",
+                 "-DserviceType=gateway",
+                 "-Dname=lb",
+                 "-DintervalStatistic=1000", "-Dlog4j.configurationFile=/mesh/mesh-log4j2.xml",
+                 "/mesh/microchassis-mesh-jar-with-dependencies.jar"]
+          resources:
+            requests:
+              memory: 3Gi
+              cpu: 8
+#              intel.com/app_app_1: "1"
+#              intel.com/app_app_2: "1"
+            limits:
+              memory: 3Gi
+              cpu: 8
+#              intel.com/app_app_1: "1"
+#              intel.com/app_app_2: "1"
+  strategy:
+    type: Recreate

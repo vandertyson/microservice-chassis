@@ -1,0 +1,10 @@
+!!com.viettel.vocs.microchassis.connection.config.ConnectionConfiguration
+clients:
+  - !!com.viettel.vocs.microchassis.http.iface.HttpClientOptions
+    id: h2client
+    host: localhost
+    port: 9013
+servers:
+  - !!com.viettel.vocs.microchassis.http.iface.HttpServerOptions
+    id: ocs-hserver
+    port: 9013

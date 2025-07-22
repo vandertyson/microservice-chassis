@@ -1,0 +1,25 @@
+!!com.viettel.vocs.microchassis.connection.config.ConnectionConfiguration
+clients:
+- host: csde-abm
+  id: client_update  
+  port: 9194  
+- host: csde-abm
+  id: client_query  
+  port: 9194  
+- host: csde-cgw
+  id: client_notify  
+  pingIntervalMs: 8888
+  port: 9209  
+- !!com.viettel.vocs.microchassis.http.iface.HttpClientOptions  
+  http2Configuration:
+    isUpgradeHttp2: true        
+  id: client_mano  
+  port: 9000  
+servers:
+- id: pcf-tcp
+  port: 9000
+- !!com.viettel.vocs.microchassis.http.iface.HttpServerOptions
+  http2Configuration:    
+    isUpgradeHttp2: true    
+  id: pcf-http
+  port: 8000  

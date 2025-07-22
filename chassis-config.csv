@@ -1,0 +1,53 @@
+owner,type,refname,envkey,propkey,defaultvalues
+com.viettel.vocs.common.CommonConfig.ScheduledJobConfig,String,name,
+com.viettel.vocs.common.CommonConfig.ScheduledJobConfig,IntegerConfig,INTERVAL_DURATION,null,String.format("%s.interval.duration",name),10
+com.viettel.vocs.common.CommonConfig.ScheduledJobConfig,IntegerConfig,DELAY_DURATION,null,String.format("%s.delay",name),10
+com.viettel.vocs.common.CommonConfig.ScheduledJobConfig,StringConfig->TimeUnit,TIME_UNIT,null,String.format("threadPool.%s.keepAlive.unit",name),"SECONDS"
+com.viettel.vocs.common.CommonConfig.ScheduledJobConfig,IntegerConfig,TIMEOUT_DURATION,null,String.format("%s.timeout",name),240
+com.viettel.vocs.common.CommonConfig.QuartzConfig,String,name,
+com.viettel.vocs.common.CommonConfig.QuartzConfig,StringConfig,quartzInstanceName,null,"%s.quartz.instanceName",defaultThreadName
+com.viettel.vocs.common.CommonConfig.QuartzConfig,StringConfig,quartzThreadCount,null,"%s.quartz.threadCount","2"
+com.viettel.vocs.common.CommonConfig.QuartzConfig,StringConfig,quartzThreadPrefix,null,"%s.quartz.threadPrefix",defaultPrefix
+com.viettel.vocs.common.CommonConfig.ThreadPoolExecutorConfig,String,name,
+com.viettel.vocs.common.CommonConfig.ThreadPoolExecutorConfig,IntegerConfig,CORE_POOL_SIZE,null,String.format(CommonConst.ThreadConst.ThreadPoolExecutor_CORE_SIZE,name),JavaConfig.N_CORE
+com.viettel.vocs.common.CommonConfig.ThreadPoolExecutorConfig,IntegerConfig,MAX_POOL_SIZE,null,String.format(CommonConst.ThreadConst.ThreadPoolExecutor_MAX_SIZE,name),ThreadConfig.TOTAL_THREADS
+com.viettel.vocs.common.CommonConfig.ThreadPoolExecutorConfig,IntegerConfig,KEEP_ALIVE_DURATION,null,String.format(CommonConst.ThreadConst.ThreadPoolExecutor_LIVE_DURATION,name),30
+com.viettel.vocs.common.CommonConfig.ThreadPoolExecutorConfig,StringConfig->TimeUnit,KEEP_ALIVE_UNIT,null,String.format(CommonConst.ThreadConst.ThreadPoolExecutor_LIVE_UNIT,name),TimeUnit.SECONDS
+com.viettel.vocs.common.CommonConfig.ThreadPoolExecutorConfig,IntegerConfig,PRIORITY,null,String.format(CommonConst.ThreadConst.ThreadPoolExecutor_PRIORITY,name),Thread.MAX_PRIORITY
+com.viettel.vocs.common.CommonConfig.ThreadPoolExecutorConfig,IntegerConfig,QUEUE_SIZE,null,String.format(CommonConst.ThreadConst.ThreadPoolExecutor_QUEUE_SIZE,name),500
+com.viettel.vocs.common.CommonConfig.ThreadPoolExecutorConfig,StringConfig,THREAD_NAME_PATTERN,null,String.format(CommonConst.ThreadConst.ThreadPoolExecutor_NAME_PATTERN,name),threadNamePattern
+com.viettel.vocs.common.CommonConfig.ThreadPoolExecutorConfig,BooleanConfig,ENABLE_THREADPOOL_CORE_TIMEOUT,null,String.format(CommonConst.ThreadConst.ThreadPoolExecutor_CORE_TIMEOUT_ENABLE,name),false
+com.viettel.vocs.common.CommonConfig.InstanceInfo,StringConfig,HOSTNAME,null,"DNS_NAME",CommonConst.Name.LOCALHOST
+com.viettel.vocs.common.CommonConfig.InstanceInfo,StringConfig,POD_NAME,"NODE_NAME","POD_NAME",HOSTNAME.get()
+com.viettel.vocs.common.CommonConfig.InstanceInfo,StringConfig,HOST_IP,"HOST_IP",null,CommonConst.Name.LOCALHOST
+com.viettel.vocs.common.CommonConfig.InstanceInfo,StringConfig,VNFC_ID,CommonConst.ManoEnvConstant.VNFC_ID.name(),CommonConst.ManoEnvConstant.VNFC_ID.name(),CommonConst.Name.LOCALHOST
+com.viettel.vocs.common.CommonConfig.InstanceInfo,StringConfig,VNF_INSTANCE_NAME,CommonConst.ManoEnvConstant.VNF_INSTANCE_NAME.name(),"chassis.metric.vnf.key",CommonConst.Name.UNKNOWN
+com.viettel.vocs.common.CommonConfig.InstanceInfo,StringConfig,VNF_INSTANCE_ID,CommonConst.ManoEnvConstant.VNF_INSTANCE_ID.name(),null,CommonConst.Name.UNDEFINED
+com.viettel.vocs.common.CommonConfig.InstanceInfo,StringConfig,VNFC_NAME,CommonConst.ManoEnvConstant.VNFC_NAME.name(),null,CommonConst.Name.UNDEFINED
+com.viettel.vocs.common.CommonConfig.InstanceInfo,String,INSTANCE_ID,VNFC_NAME.get()==null||VNFC_NAME.get().isEmpty()?VNFC_NAME.get():POD_NAME.get()
+com.viettel.vocs.common.CommonConfig.InstanceInfo,StringConfig,VDU_NAME,null,"VDU_NAME",CommonConst.Name.UNKNOWN
+com.viettel.vocs.common.CommonConfig.HashingConfig,StringConfig,magicHashKeyword,null,"client.wrh.hashKeyword","site"
+com.viettel.vocs.common.CommonConfig.StatisticConfig,IntegerConfig,DEFAULT_TITLE_LOG_CYCLE,null,"headCycle",10
+com.viettel.vocs.common.CommonConfig.StatisticConfig,IntegerConfig,intervalStatistic,null,"intervalStatistic",5000
+com.viettel.vocs.common.CommonConfig.StatisticConfig,IntegerConfig,msgStatistic,null,"numberMsgStatistic",100_000_000
+com.viettel.vocs.common.CommonConfig.SecurityConfig,StringConfig,secretString,null,"secretString","vOCSvOCSvOCSvOCSvOCSvOCSvOCSvOCS"
+com.viettel.vocs.common.CommonConfig.FormaterConfig,ListStringConfig,LIST_SEPARATOR,null,"chassis.common.list.separator",",",";","|"
+com.viettel.vocs.common.CommonConfig.ThreadConfig,IntegerConfig,core2threadFactor,"CORE_THREAD_FACTOR","common.perf.core.thread.factor",4
+com.viettel.vocs.common.CommonConfig.ThreadConfig,int,TOTAL_THREADS,JavaConfig.N_CORE*core2threadFactor.getInt()
+com.viettel.vocs.common.CommonConfig.ThreadConfig,ThreadPoolExecutorConfig,SharedPool_CONFIG,new ThreadPoolExecutorConfig("shared", "job-%d", "MINUTES")
+com.viettel.vocs.common.CommonConfig.ThreadConfig,ScheduledJobConfig,LOG_BUFFER_CONFIG,new ScheduledJobConfig("chassis.log.buffer")
+com.viettel.vocs.common.CommonConfig.ThreadConfig,ScheduledJobConfig,LOG_STATUS_CONFIG,new ScheduledJobConfig("chassis.log.status")
+com.viettel.vocs.common.CommonConfig.ThreadConfig,ScheduledJobConfig,SERVICE_DISCOVERY_CONFIG,new ScheduledJobConfig("client.discovery", TimeUnit.SECONDS, 5, 5)
+com.viettel.vocs.common.CommonConfig.ThreadConfig,ScheduledJobConfig,JOB_WITH_TIMEOUT_CONFIG,new ScheduledJobConfig("chassis.job", TimeUnit.SECONDS)
+com.viettel.vocs.common.CommonConfig.RateLimiterConfig,IntegerConfig,DEFAULT_PARK_NANO_TIME,null,CommonConst.RateLimiterConst.PARKTIMENANO,RateClock.TICK
+com.viettel.vocs.common.CommonConfig.RateLimiterConfig,IntegerConfig,DEFAULT_MAX_LOCK_TIME_MS,null,CommonConst.RateLimiterConst.MAXLOCKTIMEMS,10
+com.viettel.vocs.common.CommonConfig.RateLimiterConfig,IntegerConfig,DEFAULT_WINDOW,null,"tpsWindow",1_000_000_000L
+com.viettel.vocs.common.CommonConfig.JavaConfig,ListStringConfig,LIB_PATH,null,"libPath","../lib","../lib-common"
+com.viettel.vocs.common.CommonConfig.JavaConfig,StringConfig,CONFIG_FOLDER,"CONFIG_FOLDER","configFolder","../etc/"
+com.viettel.vocs.common.CommonConfig.JavaConfig,String,DEFAULT_LOG4J_PATH,new File(CONFIG_FOLDER.get(),"log4j2.xml").getPath()
+com.viettel.vocs.common.CommonConfig.JavaConfig,StringConfig,log4jFile,null,"log4j.configurationFile",DEFAULT_LOG4J_PATH
+com.viettel.vocs.common.CommonConfig.JavaConfig,StringConfig,cpus,"NUMBER_OF_CPU","cpus","4"/*"0" for assign counting or "4,31,23" for pinning*/
+com.viettel.vocs.common.CommonConfig.JavaConfig,String,nCoreString,resolve_nCoreString();
+com.viettel.vocs.common.CommonConfig.JavaConfig,int,N_CORE,resolve_nCore();
+com.viettel.vocs.common.CommonConfig.QueueConfig,IntegerConfig,DEFAULT_QUEUE_SIZE,null,"chassis.common.queue.size",5000
+com.viettel.vocs.common.CommonConfig.QueueConfig,StringConfig,queueType,null,"queueType","core"

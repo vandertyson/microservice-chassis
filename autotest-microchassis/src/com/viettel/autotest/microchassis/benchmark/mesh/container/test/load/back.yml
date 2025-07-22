@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: microchassis-back
+spec:
+  clusterIP: None
+  selector:
+    app: microchassis-back
+#  type: NodePort
+  ports:
+    - port: 13000
+      targetPort: 13000
+#      nodePort: 9813
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microchassis-back
+  labels:
+    app: microchassis-back
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: microchassis-back
+  template:
+    metadata:
+      labels:
+        app: microchassis-back
+    spec:
+      containers:
+        - name: microchassis-back
+          image: docker-registry:4000/tiennn18-microchassis:latest
+          imagePullPolicy: Always
+          readinessProbe:
+            tcpSocket:
+              port: 13000
+            initialDelaySeconds: 5
+            periodSeconds: 1
+          command: [ "java" ]
+          args: [ "-Xmx1700m", "-jar",
+            # server config
+                  "-DsPort=13000",
+                  "-Dnumprocess=2",
+            # general
+                  "-DserviceType=back",
+                  "-DintervalStatistic=1000", "-Dlog4j.configurationFile=/mesh/mesh-log4j2.xml",
+                  "/mesh/microchassis-mesh-jar-with-dependencies.jar" ]
+          resources:
+            requests:
+              memory: 2Gi
+              cpu: 1
+            limits:
+              memory: 2Gi
+              cpu: 1
+  strategy:
+    type: Recreate
